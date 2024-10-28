@@ -2,7 +2,7 @@
 {
     public class Info : Entity
     {
-        public required string Text { get; set; }
+        public string Text { get; set; }
         public int QuestionId { get; set; }// внешний ключ
         public virtual Question Question { get; set; }//навигационное свойство
         public int SequenceNum { get; set; }

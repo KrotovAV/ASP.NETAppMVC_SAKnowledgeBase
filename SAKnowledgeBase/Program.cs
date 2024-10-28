@@ -1,3 +1,8 @@
+using SAKnowledgeBase.DataBase;
+using SAKnowledgeBase.DataBase.Entities;
+using SAKnowledgeBase.Repositories;
+using SAKnowledgeBase.Repositories.Interfaces;
+
 namespace SAKnowledgeBase
 {
     public class Program
@@ -6,12 +11,18 @@ namespace SAKnowledgeBase
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddSingleton<AppDbContext>();
+            builder.Services.AddTransient<IRepository<Theme>, ThemeRepository>();
+            builder.Services.AddTransient<IRepository<Question>, QuestionRepository>();
+            builder.Services.AddTransient<IRepository<Info>, InfoRepository>();
+            builder.Configuration.GetConnectionString("Connection");
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");

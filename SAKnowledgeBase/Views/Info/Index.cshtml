@@ -1,0 +1,15 @@
+﻿@using SAKnowledgeBase.DataBase.Entities;
+
+@model List<Info>
+
+
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var item in Model)
+           {
+             @item.Text
+             <br/>
+           }
+    </div>
+</div>
+

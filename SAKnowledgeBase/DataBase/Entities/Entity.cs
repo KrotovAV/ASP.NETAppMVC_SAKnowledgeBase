@@ -1,6 +1,8 @@
-﻿namespace SAKnowledgeBase.DataBase.Entities
+﻿using SAKnowledgeBase.Repositories.Interfaces;
+
+namespace SAKnowledgeBase.DataBase.Entities
 {
-    public class Entity
+    public class Entity : IEntity
     {
         public int Id { get; set; }
     }

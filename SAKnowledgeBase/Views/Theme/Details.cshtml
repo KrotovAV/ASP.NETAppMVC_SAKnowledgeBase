@@ -1,0 +1,47 @@
+﻿@using SAKnowledgeBase.DataBase.Entities;
+
+@model Theme
+
+<div class="row">
+    <div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-12">
+        <div class="card">
+            <div class="card-header">
+                Detail Category ID @Model.Id
+            </div>
+            <div class="card-body">
+                <p class="card-text">Category Name: @Model.ThemeName</p>
+                @if (@Model.Questions.Count != 0)
+                {
+                    <label>Contacts List:</label>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <td>Question Name</td>
+                                <td>Info</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Questions)
+                            {
+                                <tr>
+                                    <td>@item.QuestionName</td>
+                                    <td>
+                                        <a asp-action="Details" asp-controller="Question" class="btn btn-primary" asp-route-id="@item.Id">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="card-text">No questions in theme.</p>
+                }
+                <a class="btn btn-secondary" asp-controller="Question" asp-action="Index">Cancel</a>
+            </div>
+
+        </div>
+    </div>
+</div>
