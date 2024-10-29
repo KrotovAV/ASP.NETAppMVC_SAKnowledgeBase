@@ -1,6 +1,6 @@
 ﻿@using SAKnowledgeBase.DataBase.Entities;
 
-@model Theme
+@model Question
 
 <div class="row">
     <div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-12">
@@ -9,16 +9,16 @@
                 <div class="alert alert-danger">
                     <h5>You can't delete</h5>
                 </div>
-                Theme ID @Model.Id
+                Question ID @Model.Id
             </div>
             <div class="card-body">
-                <p class="card-text">Theme Name: @Model.ThemeName</p>
+                <p class="card-text">Question Name: @Model.QuestionName</p>
                 <div class="alert alert-danger">
-                    <h5>To delete this theme, you need to edit questions.</h5>
+                    <h5>To delete this question, you need to edit infos.</h5>
                 </div>
-                @if (@Model.Questions.Count != 0)
+                @if (@Model.Infos.Count != 0)
                 {
-                    <label>Question List:</label>
+                    <label>Info List:</label>
                     <table class="table">
                         <thead>
                             <tr>
@@ -28,17 +28,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.Questions)
+                            @foreach (var item in Model.Infos)
                             {
                                 <tr>
-                                    <td>@item.QuestionName</td>
+                                    <td>@item.Text</td>
                                     <td>
-                                        <a asp-action="Details" asp-controller="Question" class="btn btn-primary" asp-route-id="@item.Id">
+                                        <a asp-action="Details" asp-controller="Info" class="btn btn-primary" asp-route-id="@item.Id">
                                             View
                                         </a>
                                     </td>
                                     <td>
-                                        <a asp-action="Edit" asp-controller="Question" class="btn btn-warning" asp-route-id="@item.Id">
+                                        <a asp-action="Edit" asp-controller="Info" class="btn btn-warning" asp-route-id="@item.Id">
                                             Edit
                                         </a>
                                     </td>
@@ -49,11 +49,12 @@
                 }
                 else
                 {
-                    <p class="card-text">No question in theme.</p>
+                    <p class="card-text">No info in question.</p>
                 }
-                <a class="btn btn-secondary" asp-controller="Theme" asp-action="Index">Cancel</a>
+                <a class="btn btn-secondary" asp-controller="Question" asp-action="Index">Cancel</a>
             </div>
 
         </div>
     </div>
 </div>
+

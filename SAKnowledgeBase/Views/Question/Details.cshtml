@@ -1,32 +1,32 @@
 ﻿@using SAKnowledgeBase.DataBase.Entities;
 
-@model Theme
+@model Question
 
 <div class="row">
     <div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-12">
         <div class="card">
             <div class="card-header">
-                Detail Theme ID @Model.Id
+                Detail Question ID @Model.Id
             </div>
             <div class="card-body">
-                <p class="card-text">Theme Name: @Model.ThemeName</p>
-                @if (@Model.Questions.Count != 0)
+                <p class="card-text">Question Name: @Model.QuestionName</p>
+                @if (@Model.Infos.Count != 0)
                 {
-                    <label>Questions List:</label>
+                    <label>Info List:</label>
                     <table class="table">
                         <thead>
                             <tr>
-                                <td>Question Name</td>
+                                <td>Text Name</td>
                                 <td>Info</td>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.Questions)
+                            @foreach (var item in Model.Infos)
                             {
                                 <tr>
-                                    <td>@item.QuestionName</td>
+                                    <td>@item.Text</td>
                                     <td>
-                                        <a asp-action="Details" asp-controller="Question" class="btn btn-primary" asp-route-id="@item.Id">
+                                        <a asp-action="Details" asp-controller="Info" class="btn btn-primary" asp-route-id="@item.Id">
                                             View
                                         </a>
                                     </td>
@@ -37,11 +37,12 @@
                 }
                 else
                 {
-                    <p class="card-text">No questions in theme.</p>
+                    <p class="card-text">No info in question.</p>
                 }
-                <a class="btn btn-secondary" asp-controller="Question" asp-action="Index">Cancel</a>
+                <a class="btn btn-secondary" asp-controller="Info" asp-action="Index">Cancel</a>
             </div>
 
         </div>
     </div>
 </div>
+

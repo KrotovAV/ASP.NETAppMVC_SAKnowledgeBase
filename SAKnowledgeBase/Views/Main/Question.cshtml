@@ -1,0 +1,35 @@
+﻿@using SAKnowledgeBase.Models.ViewModel;
+
+@model MainInfoModel
+
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var item in Model.Themes)
+        {
+            <a class="btn btn-primary" asp-action="Details" asp-controller="Main" asp-route-id="@item.Id">
+                @item.ThemeName
+            </a>
+        }
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var question in Model.Questions)
+        {
+            <a class="navbar-brand" asp-area="" asp-action="Question" asp-controller="Main" asp-route-id="@question.Id">
+                @question.QuestionName
+            </a>
+        }
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        @foreach (var item in Model.Infos)
+        {
+            @item.Text
+            <br />
+        }
+    </div>
+</div>

@@ -1,0 +1,41 @@
+﻿@using SAKnowledgeBase.DataBase.Entities;
+
+@model Info
+
+<div class="row">
+    <div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-12">
+        <div class="card">
+            <div class="card-header">
+                Detail Info ID @Model.Id
+            </div>
+            <div class="card-body">
+                <p class="card-text">Theme: @Model.Question.Theme.ThemeName</p> 
+                <p class="card-text">Question: @Model.Question.QuestionName</p>
+                <p class="card-text">Text: @Model.Text</p>             
+                <p class="card-text">TextSize: @Model.TextFormat.TextSize</p>
+                <p class="card-text">Bold: @Model.TextFormat.Boid</p>
+                <p class="card-text">Tilt: @Model.TextFormat.Tilt</p>
+                <p class="card-text">Sequence Num: @Model.SequenceNum</p>
+                <p class="card-text">Level: @Model.Level</p>
+                @if (@Model.Link != null)
+                {
+                    <p class="card-text">Link: @Model.Link</p>
+                }
+                else
+                {
+                    <p class="card-text">No link in info.</p>
+                }
+                @if (@Model.PhotoPath != null)
+                {
+                    <p class="card-text">@Model.Link</p>
+                }
+                else
+                {
+                    <p class="card-text">No photo in info.</p>
+                }
+                <a class="btn btn-secondary" asp-controller="Info" asp-action="Index">Cancel</a>
+            </div>
+
+        </div>
+    </div>
+</div>
