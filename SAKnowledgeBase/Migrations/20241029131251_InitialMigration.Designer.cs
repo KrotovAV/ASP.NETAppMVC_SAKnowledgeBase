@@ -11,7 +11,7 @@ using SAKnowledgeBase.DataBase;
 namespace SAKnowledgeBase.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241027152010_InitialMigration")]
+    [Migration("20241029131251_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -152,6 +152,9 @@ namespace SAKnowledgeBase.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SequenceNum")
+                        .HasColumnType("int");
+
                     b.Property<int>("ThemeId")
                         .HasColumnType("int");
 
@@ -166,36 +169,42 @@ namespace SAKnowledgeBase.Migrations
                         {
                             Id = 1,
                             QuestionName = "Виды требований",
+                            SequenceNum = 0,
                             ThemeId = 2
                         },
                         new
                         {
                             Id = 2,
                             QuestionName = "Эстимация",
+                            SequenceNum = 0,
                             ThemeId = 2
                         },
                         new
                         {
                             Id = 3,
                             QuestionName = "Управление требованиями",
+                            SequenceNum = 0,
                             ThemeId = 2
                         },
                         new
                         {
                             Id = 4,
                             QuestionName = "V&S",
+                            SequenceNum = 0,
                             ThemeId = 3
                         },
                         new
                         {
                             Id = 5,
                             QuestionName = "SRS",
+                            SequenceNum = 0,
                             ThemeId = 3
                         },
                         new
                         {
                             Id = 6,
                             QuestionName = "ТЗ, ЧТЗ",
+                            SequenceNum = 0,
                             ThemeId = 3
                         });
                 });
@@ -208,7 +217,7 @@ namespace SAKnowledgeBase.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Boid")
+                    b.Property<bool>("Bold")
                         .HasColumnType("bit");
 
                     b.Property<string>("FormatName")
@@ -223,63 +232,63 @@ namespace SAKnowledgeBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TextFormats");
+                    b.ToTable("Formats");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Boid = true,
+                            Bold = true,
                             FormatName = "Раздел",
-                            TextSize = 20,
+                            TextSize = 9,
                             Tilt = false
                         },
                         new
                         {
                             Id = 2,
-                            Boid = true,
+                            Bold = true,
                             FormatName = "Вопрос",
-                            TextSize = 16,
+                            TextSize = 8,
                             Tilt = false
                         },
                         new
                         {
                             Id = 3,
-                            Boid = true,
+                            Bold = true,
                             FormatName = "Подраздел",
-                            TextSize = 14,
+                            TextSize = 7,
                             Tilt = false
                         },
                         new
                         {
                             Id = 4,
-                            Boid = false,
+                            Bold = false,
                             FormatName = "Текст",
-                            TextSize = 12,
+                            TextSize = 6,
                             Tilt = false
                         },
                         new
                         {
                             Id = 5,
-                            Boid = true,
+                            Bold = true,
                             FormatName = "Текст жирный",
-                            TextSize = 12,
+                            TextSize = 6,
                             Tilt = false
                         },
                         new
                         {
                             Id = 6,
-                            Boid = false,
+                            Bold = false,
                             FormatName = "Перечисления",
-                            TextSize = 12,
+                            TextSize = 6,
                             Tilt = false
                         },
                         new
                         {
                             Id = 7,
-                            Boid = false,
+                            Bold = false,
                             FormatName = "Пояснение",
-                            TextSize = 10,
+                            TextSize = 5,
                             Tilt = true
                         });
                 });
@@ -292,29 +301,83 @@ namespace SAKnowledgeBase.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("SequenceNum")
+                        .HasColumnType("int");
+
                     b.Property<string>("ThemeName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ThemeSections");
+                    b.ToTable("Themes");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            ThemeName = "Общее"
+                            SequenceNum = 1,
+                            ThemeName = "BA/SA Agile"
                         },
                         new
                         {
                             Id = 2,
+                            SequenceNum = 2,
                             ThemeName = "Требования"
                         },
                         new
                         {
                             Id = 3,
+                            SequenceNum = 3,
                             ThemeName = "Документация"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            SequenceNum = 4,
+                            ThemeName = "Фазы проекта"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            SequenceNum = 5,
+                            ThemeName = "Прототипирование"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            SequenceNum = 6,
+                            ThemeName = "Моделирование"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            SequenceNum = 8,
+                            ThemeName = "Базы Данных"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            SequenceNum = 9,
+                            ThemeName = "Интеграции"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            SequenceNum = 10,
+                            ThemeName = "Тестирование"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            SequenceNum = 11,
+                            ThemeName = "SQL"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            SequenceNum = 7,
+                            ThemeName = "Web сервисы / API"
                         });
                 });
 

@@ -28,8 +28,33 @@
     <div class="col-md-12">
         @foreach (var item in Model.Infos)
         {
-            @item.Text
-            <br />
+            @* @item.TextFormat.TextSize *@
+
+            <font size="@item.TextFormat.TextSize">
+                @if (@item.TextFormat.Bold == true)
+                {
+                    @if (@item.TextFormat.Tilt == true)
+                    {
+                        <i>  <b>@item.Text</b> </i>
+                    }
+                    else
+                    {
+                         <b>@item.Text</b>
+                    }
+                }
+                else
+                {
+                    @if (@item.TextFormat.Tilt == true)
+                    {
+                        <i>@item.Text</i>
+                    }
+                    else
+                    {
+                        @item.Text
+                    }
+                }
+                <br />
+            </font>
         }
     </div>
 </div>

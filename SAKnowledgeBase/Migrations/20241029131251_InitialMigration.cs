@@ -13,32 +13,33 @@ namespace SAKnowledgeBase.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "TextFormats",
+                name: "Formats",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FormatName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TextSize = table.Column<int>(type: "int", nullable: false),
-                    Boid = table.Column<bool>(type: "bit", nullable: false),
+                    Bold = table.Column<bool>(type: "bit", nullable: false),
                     Tilt = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TextFormats", x => x.Id);
+                    table.PrimaryKey("PK_Formats", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ThemeSections",
+                name: "Themes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ThemeName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ThemeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SequenceNum = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ThemeSections", x => x.Id);
+                    table.PrimaryKey("PK_Themes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -48,15 +49,16 @@ namespace SAKnowledgeBase.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     QuestionName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SequenceNum = table.Column<int>(type: "int", nullable: false),
                     ThemeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Questions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Questions_ThemeSections_ThemeId",
+                        name: "FK_Questions_Themes_ThemeId",
                         column: x => x.ThemeId,
-                        principalTable: "ThemeSections",
+                        principalTable: "Themes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -79,54 +81,62 @@ namespace SAKnowledgeBase.Migrations
                 {
                     table.PrimaryKey("PK_Infos", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Infos_Formats_FormatId",
+                        column: x => x.FormatId,
+                        principalTable: "Formats",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Infos_Questions_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Infos_TextFormats_FormatId",
-                        column: x => x.FormatId,
-                        principalTable: "TextFormats",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
-                table: "TextFormats",
-                columns: new[] { "Id", "Boid", "FormatName", "TextSize", "Tilt" },
+                table: "Formats",
+                columns: new[] { "Id", "Bold", "FormatName", "TextSize", "Tilt" },
                 values: new object[,]
                 {
-                    { 1, true, "Раздел", 20, false },
-                    { 2, true, "Вопрос", 16, false },
-                    { 3, true, "Подраздел", 14, false },
-                    { 4, false, "Текст", 12, false },
-                    { 5, true, "Текст жирный", 12, false },
-                    { 6, false, "Перечисления", 12, false },
-                    { 7, false, "Пояснение", 10, true }
+                    { 1, true, "Раздел", 9, false },
+                    { 2, true, "Вопрос", 8, false },
+                    { 3, true, "Подраздел", 7, false },
+                    { 4, false, "Текст", 6, false },
+                    { 5, true, "Текст жирный", 6, false },
+                    { 6, false, "Перечисления", 6, false },
+                    { 7, false, "Пояснение", 5, true }
                 });
 
             migrationBuilder.InsertData(
-                table: "ThemeSections",
-                columns: new[] { "Id", "ThemeName" },
+                table: "Themes",
+                columns: new[] { "Id", "SequenceNum", "ThemeName" },
                 values: new object[,]
                 {
-                    { 1, "Общее" },
-                    { 2, "Требования" },
-                    { 3, "Документация" }
+                    { 1, 1, "BA/SA Agile" },
+                    { 2, 2, "Требования" },
+                    { 3, 3, "Документация" },
+                    { 4, 4, "Фазы проекта" },
+                    { 5, 5, "Прототипирование" },
+                    { 6, 6, "Моделирование" },
+                    { 7, 8, "Базы Данных" },
+                    { 8, 9, "Интеграции" },
+                    { 9, 10, "Тестирование" },
+                    { 10, 11, "SQL" },
+                    { 11, 7, "Web сервисы / API" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Questions",
-                columns: new[] { "Id", "QuestionName", "ThemeId" },
+                columns: new[] { "Id", "QuestionName", "SequenceNum", "ThemeId" },
                 values: new object[,]
                 {
-                    { 1, "Виды требований", 2 },
-                    { 2, "Эстимация", 2 },
-                    { 3, "Управление требованиями", 2 },
-                    { 4, "V&S", 3 },
-                    { 5, "SRS", 3 },
-                    { 6, "ТЗ, ЧТЗ", 3 }
+                    { 1, "Виды требований", 0, 2 },
+                    { 2, "Эстимация", 0, 2 },
+                    { 3, "Управление требованиями", 0, 2 },
+                    { 4, "V&S", 0, 3 },
+                    { 5, "SRS", 0, 3 },
+                    { 6, "ТЗ, ЧТЗ", 0, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -167,13 +177,13 @@ namespace SAKnowledgeBase.Migrations
                 name: "Infos");
 
             migrationBuilder.DropTable(
+                name: "Formats");
+
+            migrationBuilder.DropTable(
                 name: "Questions");
 
             migrationBuilder.DropTable(
-                name: "TextFormats");
-
-            migrationBuilder.DropTable(
-                name: "ThemeSections");
+                name: "Themes");
         }
     }
 }

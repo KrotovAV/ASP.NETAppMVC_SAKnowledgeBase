@@ -23,28 +23,30 @@ namespace SAKnowledgeBase.Controllers
         public async Task<IActionResult> Index()
         {
             var mainInfos = new MainInfoModel();
-            mainInfos.Themes = await _themeRepo.Items.ToListAsync();
-            mainInfos.Questions = await _questionRepo.Items.ToListAsync(); 
-            mainInfos.Infos = await _infoRepo.Items.ToListAsync();
+            mainInfos.Themes = await _themeRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
+            mainInfos.Questions = await _questionRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync(); 
+            mainInfos.Infos = await _infoRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
 
             return View(mainInfos);
         }
+
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             var mainInfos = new MainInfoModel();
-            mainInfos.Themes = await _themeRepo.Items.ToListAsync();
+            mainInfos.Themes = await _themeRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
             var theme = await _themeRepo.GetAsync(id);
-            mainInfos.Questions = theme.Questions.ToList();
+            mainInfos.Questions = theme.Questions.OrderBy(x => x.SequenceNum).ToList();
 
-            mainInfos.Infos = new List<Info>();
+            List<Info> listInfos = new List<Info>();
             foreach (var question in theme.Questions)
             {
                 foreach (var info in question.Infos)
                 {
-                    mainInfos.Infos.Add(info);
+                    listInfos.Add(info);
                 }
             }
+            mainInfos.Infos = listInfos.OrderBy(x => x.SequenceNum).ToList();
             return View(mainInfos);
         }
 
@@ -53,20 +55,19 @@ namespace SAKnowledgeBase.Controllers
         {
             var mainInfos = new MainInfoModel();
 
-            mainInfos.Themes = await _themeRepo.Items.ToListAsync();
+            mainInfos.Themes = await _themeRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
 
                 var question = await _questionRepo.GetAsync(id);
                 var theme = question.Theme;
 
-            mainInfos.Questions = theme.Questions.ToList();
+            mainInfos.Questions = theme.Questions.OrderBy(x => x.SequenceNum).ToList();
 
-            mainInfos.Infos = new List<Info>();
-
+            List<Info> listInfos = new List<Info>();
             foreach (var info in question.Infos)
             {
-                mainInfos.Infos.Add(info);
+                listInfos.Add(info);
             }
-
+            mainInfos.Infos = listInfos.OrderBy(x => x.SequenceNum).ToList();
             return View(mainInfos);
         }
 

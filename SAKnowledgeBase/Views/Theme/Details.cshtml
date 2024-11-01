@@ -10,6 +10,7 @@
             </div>
             <div class="card-body">
                 <p class="card-text">Theme Name: @Model.ThemeName</p>
+                <p class="card-text">Sequence Num: @Model.SequenceNum</p>
                 @if (@Model.Questions.Count != 0)
                 {
                     <label>Questions List:</label>
@@ -39,7 +40,8 @@
                 {
                     <p class="card-text">No questions in theme.</p>
                 }
-                <a class="btn btn-secondary" asp-controller="Question" asp-action="Index">Cancel</a>
+                <a class="btn btn-secondary" asp-controller="Theme" asp-action="Index">Cancel</a>
+                <a class="btn btn-primary" asp-controller="Question" asp-action="Index">Questions</a>
             </div>
 
         </div>

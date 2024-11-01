@@ -3,9 +3,14 @@
 @model List<Info>
 
 <div class="row">
-    <div class="col-md-12">
-        <a asp-action="Create" asp-asp-controller="Info" class="btn btn-success">
+    <div class="col-md-10">
+        <a asp-action="Create" asp-controller="Info" class="btn btn-success">
             Create
+        </a>
+    </div>
+    <div class="col-md-2">
+        <a asp-action="UploadExcel" asp-controller="File" class="btn btn-success">
+            Upload Excel File
         </a>
     </div>
     <div class="col-md-12">

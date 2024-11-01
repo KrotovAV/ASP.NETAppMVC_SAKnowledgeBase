@@ -8,10 +8,10 @@ namespace SAKnowledgeBase.DataBase
 {
     public class AppDbContext : DbContext
     {
-        public DbSet<TextFormat> TextFormats { get; set; }
+        public DbSet<TextFormat> Formats { get; set; }
         public DbSet<Info> Infos { get; set; }
         public DbSet<Question> Questions { get; set; }
-        public DbSet<Theme> ThemeSections { get; set; }
+        public DbSet<Theme> Themes { get; set; }
 
         //    dotnet ef migrations add InitialMigration 
         //    dotnet ef database update
@@ -32,18 +32,23 @@ namespace SAKnowledgeBase.DataBase
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            // string Text, int ThemeId,int QuestionId, int SequenceNum, int FormatId, string? PhotoPath ,int Level, string? Link
-            //modelBuilder.Entity<Info>().HasOne(u => u.Theme).WithMany(c => c.Infos).HasForeignKey(u => u.ThemeId);
             modelBuilder.Entity<Info>().HasOne(u => u.Question).WithMany(c => c.Infos).HasForeignKey(u => u.QuestionId);
             modelBuilder.Entity<Info>().HasOne(u => u.TextFormat).WithMany(c => c.Infos).HasForeignKey(u => u.FormatId);
             modelBuilder.Entity<Question>().HasOne(u => u.Theme).WithMany(c => c.Questions).HasForeignKey(u => u.ThemeId);
 
             modelBuilder.Entity<Theme>().HasData(
                 new Theme[]{
-                    new Theme { Id=1, ThemeName="Общее"},
-                    new Theme { Id=2, ThemeName="Требования"},
-                    new Theme { Id=3, ThemeName="Документация"}
+                    new Theme { Id=1, ThemeName="BA/SA Agile", SequenceNum = 1},
+                    new Theme { Id=2, ThemeName="Требования", SequenceNum = 2},
+                    new Theme { Id=3, ThemeName="Документация",SequenceNum = 3},
+                    new Theme { Id=4, ThemeName="Фазы проекта",SequenceNum = 4},
+                    new Theme { Id=5, ThemeName="Прототипирование",SequenceNum = 5},
+                    new Theme { Id=6, ThemeName="Моделирование",SequenceNum = 6},
+                    new Theme { Id=7, ThemeName="Базы Данных",SequenceNum = 8},
+                    new Theme { Id=8, ThemeName="Интеграции",SequenceNum = 9},
+                    new Theme { Id=9, ThemeName="Тестирование",SequenceNum = 10},
+                    new Theme { Id=10, ThemeName="SQL",SequenceNum = 11},
+                    new Theme { Id=11, ThemeName="Web сервисы / API",SequenceNum = 7}
                 }
             );
 
@@ -61,13 +66,13 @@ namespace SAKnowledgeBase.DataBase
 
             modelBuilder.Entity<TextFormat>().HasData(
                 new TextFormat[]{
-                    new TextFormat { Id=1, FormatName="Раздел",  TextSize = 20, Boid = true, Tilt = false},
-                    new TextFormat { Id=2, FormatName="Вопрос",  TextSize = 16, Boid = true, Tilt = false},
-                    new TextFormat { Id=3, FormatName="Подраздел",  TextSize = 14, Boid = true, Tilt = false},
-                    new TextFormat { Id=4, FormatName="Текст",  TextSize = 12, Boid = false, Tilt = false},
-                    new TextFormat { Id=5, FormatName="Текст жирный",  TextSize = 12, Boid = true, Tilt = false},
-                    new TextFormat { Id=6, FormatName="Перечисления",  TextSize = 12, Boid = false, Tilt = false},
-                    new TextFormat { Id=7, FormatName="Пояснение",  TextSize = 10, Boid = false, Tilt =true }
+                    new TextFormat { Id=1, FormatName="Раздел",  TextSize = 7, Bold = true, Tilt = false},
+                    new TextFormat { Id=2, FormatName="Вопрос",  TextSize = 6, Bold = true, Tilt = false},
+                    new TextFormat { Id=3, FormatName="Подраздел",  TextSize = 5, Bold = true, Tilt = false},
+                    new TextFormat { Id=4, FormatName="Текст",  TextSize = 4, Bold = false, Tilt = false},
+                    new TextFormat { Id=5, FormatName="Текст жирный",  TextSize = 4, Bold = true, Tilt = false},
+                    new TextFormat { Id=6, FormatName="Перечисления",  TextSize = 4, Bold = false, Tilt = false},
+                    new TextFormat { Id=7, FormatName="Пояснение",  TextSize = 3, Bold = false, Tilt =true }
 
                 }
             );

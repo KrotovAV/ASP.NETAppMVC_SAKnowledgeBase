@@ -4,10 +4,22 @@
 
 
 <div class="row">
-    <div class="col-md-12">
-        <a asp-action="Create" asp-asp-controller="Theme" class="btn btn-success">
+    <div class="col-md-10">
+        <a asp-action="Create" asp-controller="Theme" class="btn btn-success">
             Create
         </a>
+    </div>
+    <div class="col-md-2">
+        @* <a asp-action="Import" asp-controller="Theme" class="btn btn-success">
+            Import CSV
+        </a>
+        <a asp-action="Export" asp-controller="Theme" class="btn btn-success">
+            Export CSV
+        </a> *@
+        <a asp-action="UploadExcel" asp-controller="File" class="btn btn-success">
+            Upload Excel File
+        </a>
+        
     </div>
     <div class="col-md-12">
         <table class="table">
@@ -16,6 +28,7 @@
                     <td>Manage</td>
                     @* <td>Id</td> *@
                     <td>Theme Name</td>
+                    <td>Sequence Num </td>
                     <td>Contains Questions</td>
                     <td>Info</td>
                 </tr>
@@ -34,6 +47,7 @@
                         </td>
                         @* <td>@item.Id</td> *@
                         <td>@item.ThemeName</td>
+                        <td>@item.SequenceNum</td>
                         <td>@item.Questions.Count</td>
                         <td>
                             <a asp-action="Details" asp-controller="Theme" class="btn btn-primary" asp-route-id="@item.Id">

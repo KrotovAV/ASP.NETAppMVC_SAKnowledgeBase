@@ -15,7 +15,7 @@ namespace SAKnowledgeBase.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var infos = await _infoRepo.Items.ToListAsync();
+            var infos = await _infoRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
             return View(infos);
         }
 
