@@ -3,20 +3,24 @@
 @model Question
 
 <div class="row">
-    <div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-12">
+   @*  <div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-12"> *@
+    <div class="col-lg-12 offset-lg-0 col-md-11 offset-md-0 col-12">
         <div class="card">
             <div class="card-header">
                 Detail Question ID @Model.Id
             </div>
             <div class="card-body">
-                <p class="card-text">Question Name: @Model.QuestionName</p>
+                <p class="card-text">Theme: <b>@Model.Theme.ThemeName</b></p>
+                <p class="card-text">Question: <b>@Model.QuestionName</b></p>
                 @if (@Model.Infos.Count != 0)
                 {
                     <label>Info List:</label>
                     <table class="table">
                         <thead>
                             <tr>
-                                <td>Text Name</td>
+                                <td>Id</td>
+                                <td>Text</td>
+                                <td>Sequence</td>
                                 <td>Info</td>
                             </tr>
                         </thead>
@@ -24,10 +28,46 @@
                             @foreach (var item in Model.Infos)
                             {
                                 <tr>
-                                    <td>@item.Text</td>
+                                    <td>@item.Id</td>
+
+                                    <td>
+                                        <font size="@item.TextFormat.TextSize">
+                                            @if (@item.TextFormat.Bold == true)
+                                            {
+                                                @if (@item.TextFormat.Tilt == true)
+                                                {
+                                                    <i>  <b>@item.Text</b> </i>
+                                                }
+                                                else
+                                                {
+                                                    <b>@item.Text</b>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @if (@item.TextFormat.Tilt == true)
+                                                {
+                                                    <i>@item.Text</i>
+                                                }
+                                                else
+                                                {
+                                                    @item.Text
+                                                }
+                                            }
+                                            <br />
+                                        </font>
+
+
+
+                                    </td>
+
+                                    <td>@item.SequenceNum</td>
                                     <td>
                                         <a asp-action="Details" asp-controller="Info" class="btn btn-primary" asp-route-id="@item.Id">
                                             View
+                                        </a>
+                                        <a asp-action="Edit" asp-controller="Info" class="btn btn-warning" asp-route-id="@item.Id">
+                                            Edit
                                         </a>
                                     </td>
                                 </tr>

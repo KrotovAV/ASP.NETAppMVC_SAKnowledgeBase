@@ -3,13 +3,14 @@
 @model Theme
 
 <div class="row">
-    <div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-12">
+    <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1 col-12">
         <div class="card">
             <div class="card-header">
                 Detail Theme ID @Model.Id
             </div>
             <div class="card-body">
-                <p class="card-text">Theme Name: @Model.ThemeName</p>
+        
+                <p class="card-text">Theme Name: <b>@Model.ThemeName</b> </p>
                 <p class="card-text">Sequence Num: @Model.SequenceNum</p>
                 @if (@Model.Questions.Count != 0)
                 {
@@ -17,7 +18,9 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <td>Question Id</td>
                                 <td>Question Name</td>
+                                <td>Sequence num</td>
                                 <td>Info</td>
                             </tr>
                         </thead>
@@ -25,7 +28,9 @@
                             @foreach (var item in Model.Questions)
                             {
                                 <tr>
+                                    <td>@item.Id</td>
                                     <td>@item.QuestionName</td>
+                                    <td>@item.SequenceNum</td>
                                     <td>
                                         <a asp-action="Details" asp-controller="Question" class="btn btn-primary" asp-route-id="@item.Id">
                                             View

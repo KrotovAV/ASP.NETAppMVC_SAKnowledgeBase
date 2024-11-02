@@ -1,31 +1,17 @@
-﻿using CsvHelper;
-using System.Collections.Generic;
-using System.IO;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using System;
-using System.IO;
-using System.Web;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SAKnowledgeBase.DataBase.Entities;
 using SAKnowledgeBase.Repositories.Interfaces;
-using SAKnowledgeBase.Services;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace SAKnowledgeBase.Controllers
 {
     public class ThemeController : Controller
     {
         private IRepository<Theme> _themeRepo;
-        private readonly ICSVService _csvService;
         private IWebHostEnvironment _environment;
-        public ThemeController(IRepository<Theme> themeRepo, ICSVService csvService, IWebHostEnvironment environment)
+        public ThemeController(IRepository<Theme> themeRepo, IWebHostEnvironment environment)
         {
             _themeRepo = themeRepo;
-            _csvService = csvService;
             _environment = environment;
         }
         public async Task<IActionResult> Index()
@@ -131,22 +117,6 @@ namespace SAKnowledgeBase.Controllers
         {
             var theme = await _themeRepo.GetAsync(id);
             return View(theme);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> GetCSV([FromForm] IFormFileCollection file)
-        {
-            var themes = _csvService.ReadCSV<Theme>(file[0].OpenReadStream());
-
-            return Ok(themes);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> WriteCSV([FromBody] List<Theme> themes)
-        {
-            _csvService.WriteCSV<Theme>(themes);
-
-            return Ok();
         }
     }
 }

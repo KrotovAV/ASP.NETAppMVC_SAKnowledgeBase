@@ -3,7 +3,6 @@ using SAKnowledgeBase.DataBase;
 using SAKnowledgeBase.DataBase.Entities;
 using SAKnowledgeBase.Repositories;
 using SAKnowledgeBase.Repositories.Interfaces;
-using SAKnowledgeBase.Services;
 
 namespace SAKnowledgeBase
 {
@@ -22,7 +21,6 @@ namespace SAKnowledgeBase
             builder.Services.AddTransient<IRepository<Info>, InfoRepository>();
             builder.Configuration.GetConnectionString("Connection");
 
-            builder.Services.AddScoped<ICSVService, CSVService>();
             builder.Services.AddSingleton<IFileProvider>(
             new PhysicalFileProvider(
                 Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));

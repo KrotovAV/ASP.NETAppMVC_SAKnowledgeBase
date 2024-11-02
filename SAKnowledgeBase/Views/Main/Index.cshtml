@@ -6,10 +6,6 @@
     <div class="col-md-12">
         @foreach (var item in Model.Themes)
         {
-            @* <a class="navbar-brand" asp-area="" asp-controller="Main" asp-action="Index">@item.ThemeName</a> *@
-            @* <br /> *@
-            @* @item.ThemeName
-            <br /> *@
             <a asp-action="Details" asp-controller="Main" class="btn btn-primary" asp-route-id="@item.Id">
                 @item.ThemeName
             </a>
@@ -22,8 +18,6 @@
         @foreach (var item in Model.Questions)
         {
             <a class="navbar-brand" asp-area="" asp-controller="Main" asp-action="Index">@item.QuestionName</a>
-            @* @item.QuestionName
-            <br /> *@
         }
     </div>
 </div>

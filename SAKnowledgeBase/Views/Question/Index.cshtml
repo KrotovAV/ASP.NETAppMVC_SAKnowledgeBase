@@ -3,22 +3,31 @@
 @model List<Question>
 
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-8">
         <a asp-action="Create" asp-controller="Question" class="btn btn-success">
             Create
         </a>
     </div>
     <div class="col-md-2">
-        <a asp-action="UploadExcel" asp-controller="File" class="btn btn-success">
+        <a asp-action="UploadQuestionExcel" asp-controller="File" class="btn btn-success">
             Upload Excel File
         </a>
+    </div>
+    <div class="col-md-2">
+        <form asp-action="ExportQuestionExcel" asp-controller="File" method="post">
+            <button type="submit" class="btn btn-success">
+                Generate Excel File
+            </button>
+        </form>
     </div>
     <div class="col-md-12">
         <table class="table">
             <thead>
                 <tr>
                     <td>Manage</td>
+                    <td>Id</td>
                     <td>Question Name</td>
+                    <td>Sequence Num </td>
                     <td>Theme Name</td>
                     <td>Contains</td>
                     <td>Info</td>
@@ -36,7 +45,9 @@
                                 Delete
                             </a>
                         </td>
+                        <td>@item.Id</td>
                         <td>@item.QuestionName</td>
+                        <td>@item.SequenceNum</td>
                         <td>@item.Theme.ThemeName</td>
                         <td>@item.Infos.Count</td>
                         <td>

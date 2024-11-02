@@ -3,15 +3,22 @@
 @model List<Info>
 
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-8">
         <a asp-action="Create" asp-controller="Info" class="btn btn-success">
             Create
         </a>
     </div>
     <div class="col-md-2">
-        <a asp-action="UploadExcel" asp-controller="File" class="btn btn-success">
+        <a asp-action="UploadInfoExcel" asp-controller="File" class="btn btn-success">
             Upload Excel File
         </a>
+    </div>
+    <div class="col-md-2">
+        <form asp-action="ExportInfoExcel" asp-controller="File" method="post">
+            <button type="submit" class="btn btn-success">
+                Generate Excel File
+            </button>
+        </form>
     </div>
     <div class="col-md-12">
         <table class="table">
@@ -19,8 +26,11 @@
                 <tr>
                     <td>Manage</td>
                     <td>Text</td>
+                    <td>Sequence Num </td>
                     <td>Question Name</td>
+                    <td>Question Sequence Num</td>
                     <td>Theme Name</td>
+                    <td>Theme Sequence Num</td>
                     <td>Info</td>
                 </tr>
             </thead>
@@ -37,8 +47,11 @@
                             </a>
                         </td>
                         <td>@item.Text</td>
+                        <td>@item.SequenceNum</td>
                         <td>@item.Question.QuestionName</td>
+                        <td>@item.Question.SequenceNum</td>
                         <td>@item.Question.Theme.ThemeName</td>
+                        <td>@item.Question.Theme.SequenceNum</td>
                         <td>
                             <a asp-action="Details" asp-controller="Info" class="btn btn-primary" asp-route-id="@item.Id">
                                 View

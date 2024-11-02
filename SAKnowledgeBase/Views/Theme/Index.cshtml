@@ -4,29 +4,32 @@
 
 
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-8">
         <a asp-action="Create" asp-controller="Theme" class="btn btn-success">
             Create
         </a>
     </div>
     <div class="col-md-2">
-        @* <a asp-action="Import" asp-controller="Theme" class="btn btn-success">
-            Import CSV
-        </a>
-        <a asp-action="Export" asp-controller="Theme" class="btn btn-success">
-            Export CSV
-        </a> *@
-        <a asp-action="UploadExcel" asp-controller="File" class="btn btn-success">
+        <a asp-action="UploadThemeExcel" asp-controller="File" class="btn btn-success">
             Upload Excel File
         </a>
-        
     </div>
+
+    <div class="col-md-2">
+        <form asp-action="ExportThemeExcel" asp-controller="File" method="post">
+            <button type="submit" class="btn btn-success">
+                Generate Excel File
+            </button>
+        </form> 
+    </div>
+     
+    
     <div class="col-md-12">
         <table class="table">
             <thead>
                 <tr>
                     <td>Manage</td>
-                    @* <td>Id</td> *@
+                    <td>Id</td>
                     <td>Theme Name</td>
                     <td>Sequence Num </td>
                     <td>Contains Questions</td>
@@ -45,7 +48,7 @@
                                 Delete
                             </a>
                         </td>
-                        @* <td>@item.Id</td> *@
+                        <td>@item.Id</td>
                         <td>@item.ThemeName</td>
                         <td>@item.SequenceNum</td>
                         <td>@item.Questions.Count</td>

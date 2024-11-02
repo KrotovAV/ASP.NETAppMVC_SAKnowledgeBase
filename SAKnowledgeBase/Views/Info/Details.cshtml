@@ -3,15 +3,46 @@
 @model Info
 
 <div class="row">
-    <div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-12">
+    <div class="col-lg-10 offset-lg-1 col-md-10 offset-md-1 col-12">
         <div class="card">
             <div class="card-header">
                 Detail Info ID @Model.Id
             </div>
             <div class="card-body">
-                <p class="card-text">Theme: @Model.Question.Theme.ThemeName</p> 
-                <p class="card-text">Question: @Model.Question.QuestionName</p>
-                <p class="card-text">Text: @Model.Text</p>             
+                <p class="card-text">Theme: <b>@Model.Question.Theme.ThemeName</b></p>
+                <p class="card-text">Question: <b>@Model.Question.QuestionName</b></p>
+
+                <p
+                    <font size="@Model.TextFormat.TextSize">
+                        @if (@Model.TextFormat.Bold == true)
+                        {
+                            @if (@Model.TextFormat.Tilt == true)
+                            {
+                                 <i>  <b>@Model.Text</b> </i>
+                            }
+                            else
+                            {
+                                 <b>@Model.Text</b>
+                            }
+                        }
+                        else
+                        {
+                            @if (@Model.TextFormat.Tilt == true)
+                            {
+                                 <i>@Model.Text</i>
+                            }
+                            else
+                            {
+                                @Model.Text
+                            }
+                        }
+                        <br />
+                    </font>
+                </p>
+@* 
+                <p class="card-text">Text: @Model.Text</p>  *@  
+                
+
                 <p class="card-text">TextSize: @Model.TextFormat.TextSize</p>
                 <p class="card-text">Bold: @Model.TextFormat.Bold</p>
                 <p class="card-text">Tilt: @Model.TextFormat.Tilt</p>

@@ -24,8 +24,44 @@ namespace SAKnowledgeBase.Controllers
         {
             var mainInfos = new MainInfoModel();
             mainInfos.Themes = await _themeRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
-            mainInfos.Questions = await _questionRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync(); 
-            mainInfos.Infos = await _infoRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
+
+            //mainInfos.Questions = await _questionRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
+            //mainInfos.Questions = await _questionRepo.Items
+            //.OrderBy(x => x.SequenceNum)
+            //.OrderBy(x => x.Theme.SequenceNum)
+            //.ToListAsync();
+
+            mainInfos.Questions = new List<Question>();
+            foreach (var theme in mainInfos.Themes) 
+            {
+                List<Question> themeQuestions = new List<Question>();
+                foreach (var question in theme.Questions) 
+                {
+                    themeQuestions.Add(question);
+                }
+                themeQuestions.OrderBy(x => x.SequenceNum).ToList();
+                mainInfos.Questions.AddRange(themeQuestions);
+            }
+
+            mainInfos.Infos = new List<Info>();
+            foreach (var question in mainInfos.Questions)
+            {
+                List<Info> questionInfos = new List<Info>();
+                foreach (var info in question.Infos)
+                {
+                    questionInfos.Add(info);
+                }
+                questionInfos.OrderBy(x => x.SequenceNum).ToList();
+                mainInfos.Infos.AddRange(questionInfos);
+            }
+
+
+            //mainInfos.Infos = await _infoRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
+            //mainInfos.Infos = await _infoRepo.Items
+            //    .OrderBy(x => x.SequenceNum)
+            //    .OrderBy(x => x.Question.SequenceNum)
+            //    .OrderBy(x => x.Question.Theme.SequenceNum)
+            //    .ToListAsync();
 
             return View(mainInfos);
         }
@@ -34,19 +70,34 @@ namespace SAKnowledgeBase.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var mainInfos = new MainInfoModel();
+
             mainInfos.Themes = await _themeRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
+
             var theme = await _themeRepo.GetAsync(id);
             mainInfos.Questions = theme.Questions.OrderBy(x => x.SequenceNum).ToList();
 
-            List<Info> listInfos = new List<Info>();
-            foreach (var question in theme.Questions)
+            //List<Info> listInfos = new List<Info>();
+            //foreach (var question in theme.Questions)
+            //{
+            //    foreach (var info in question.Infos)
+            //    {
+            //        listInfos.Add(info);
+            //    }
+            //}
+            //mainInfos.Infos = listInfos.OrderBy(x => x.SequenceNum).ToList();
+
+            mainInfos.Infos = new List<Info>();
+            foreach (var question in mainInfos.Questions)
             {
+                List<Info> questionInfos = new List<Info>();
                 foreach (var info in question.Infos)
                 {
-                    listInfos.Add(info);
+                    questionInfos.Add(info);
                 }
+                questionInfos.OrderBy(x => x.SequenceNum).ToList();
+                mainInfos.Infos.AddRange(questionInfos);
             }
-            mainInfos.Infos = listInfos.OrderBy(x => x.SequenceNum).ToList();
+
             return View(mainInfos);
         }
 
@@ -62,12 +113,25 @@ namespace SAKnowledgeBase.Controllers
 
             mainInfos.Questions = theme.Questions.OrderBy(x => x.SequenceNum).ToList();
 
-            List<Info> listInfos = new List<Info>();
-            foreach (var info in question.Infos)
+            //List<Info> listInfos = new List<Info>();
+            //foreach (var info in question.Infos)
+            //{
+            //    listInfos.Add(info);
+            //}
+            //mainInfos.Infos = listInfos.OrderBy(x => x.SequenceNum).ToList();
+
+            mainInfos.Infos = new List<Info>();
+            foreach (var localQuestion in mainInfos.Questions)
             {
-                listInfos.Add(info);
+                List<Info> questionInfos = new List<Info>();
+                foreach (var info in localQuestion.Infos)
+                {
+                    questionInfos.Add(info);
+                }
+                questionInfos.OrderBy(x => x.SequenceNum).ToList();
+                mainInfos.Infos.AddRange(questionInfos);
             }
-            mainInfos.Infos = listInfos.OrderBy(x => x.SequenceNum).ToList();
+
             return View(mainInfos);
         }
 
