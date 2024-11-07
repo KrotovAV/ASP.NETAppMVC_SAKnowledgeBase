@@ -4,9 +4,12 @@
 
 <div class="row">
     <div class="col-md-12">
+        <a type="button" class="btn btn-outline-primary mt-1 btn-lg" asp-controller="Main" asp-action="Index">
+            <b>Все темы</b> 
+        </a>
         @foreach (var item in Model.Themes)
         {
-            <a asp-action="Details" asp-controller="Main" class="btn btn-primary" asp-route-id="@item.Id">
+            <a asp-action="Details" asp-controller="Main" class="btn btn-primary mt-1 btn-lg" asp-route-id="@item.Id">
                 @item.ThemeName
             </a>
         }
@@ -17,7 +20,9 @@
     <div class="col-md-12">
         @foreach (var item in Model.Questions)
         {
-            <a class="navbar-brand" asp-area="" asp-controller="Main" asp-action="Index">@item.QuestionName</a>
+            <a class="navbar-brand" asp-area="" asp-controller="Main" asp-action="Index" asp-route-id="@item.Id">
+                @item.QuestionName
+            </a>
         }
     </div>
 </div>
@@ -51,6 +56,13 @@
                 }
                 <br />
             </font>
+            @if (@item.PhotoPath != null)
+            {
+                string imagePath = "~/img/" + @item.PhotoPath;
+                <img src="@imagePath" class="img-fluid" width="600" height="800" asp-append-version="true" />
+                <br />
+                <br />
+            }
         }
     </div>
 </div>

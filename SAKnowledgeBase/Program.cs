@@ -18,7 +18,8 @@ namespace SAKnowledgeBase
             builder.Services.AddSingleton<AppDbContext>();
             builder.Services.AddTransient<IRepository<Theme>, ThemeRepository>();
             builder.Services.AddTransient<IRepository<Question>, QuestionRepository>();
-            builder.Services.AddTransient<IRepository<Info>, InfoRepository>();
+            builder.Services.AddTransient<IRepository<Info>, InfoRepository>(); 
+            builder.Services.AddTransient<IRepository<TextFormat>, TextFormatRepository>();
             builder.Configuration.GetConnectionString("Connection");
 
             builder.Services.AddSingleton<IFileProvider>(

@@ -1,27 +1,66 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SAKnowledgeBase.DataBase.Entities;
+using SAKnowledgeBase.Models.ViewModel;
 using SAKnowledgeBase.Repositories.Interfaces;
+using System;
 
 namespace SAKnowledgeBase.Controllers
 {
     public class InfoController : Controller
     {
         private IRepository<Info> _infoRepo;
+        private IRepository<Question> _questionRepo;
+        private IRepository<Theme> _themeRepo;
+        private IRepository<TextFormat> _textFormatRepo;
+        private IWebHostEnvironment _environment;
 
-        public InfoController(IRepository<Info> infoRepo)
+        public InfoController(
+            IRepository<Info> infoRepo, 
+            IRepository<Question> questionRepo, 
+            IRepository<Theme> themeRepo, 
+            IRepository<TextFormat> textFormatRepo, 
+            IWebHostEnvironment environment)
         {
             _infoRepo = infoRepo;
+            _questionRepo = questionRepo;
+            _themeRepo = themeRepo;
+            _textFormatRepo = textFormatRepo;
+            _environment = environment;
         }
+        
         public async Task<IActionResult> Index()
         {
+            InfoViewModel infoViewModel = new InfoViewModel();  
             var infos = await _infoRepo.Items
                 .OrderBy(x => x.SequenceNum)
                 .OrderBy(x => x.Question.SequenceNum)
                 .OrderBy(x => x.Question.Theme.SequenceNum)
                 .ToListAsync();
-            return View(infos);
+
+            //var themes = await _themeRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
+            var themesData = await _themeRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
+
+            infoViewModel.Infos = infos;
+            infoViewModel.ThemesSelectListItem = themesData
+                     .Select(i => new SelectListItem
+                     {
+                         Value = i.Id.ToString(),
+                         Text = i.ThemeName
+                     }).ToList();
+
+            //await LoadDropdownListIndex();
+            //return View(infos);
+            return View(infoViewModel);
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> Index(InfoViewModel infoViewModel)
+        //{
+        //    var selectedThemeId = infoViewModel.SelectedThemeId;
+        //    return RedirectToAction("Create");
+        //}
 
 
         [HttpGet]
@@ -32,19 +71,33 @@ namespace SAKnowledgeBase.Controllers
             return View(info);
         }
 
-
-
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            await LoadDropdownList();
             return View();
         }
 
+
+
         [HttpPost]
-        public async Task<IActionResult> Create(Info info)
+        public async Task<IActionResult> Create(InfoCreateViewModel infoCreateViewModel)
         {
             if (ModelState.IsValid)
             {
+                Info info = new Info //Text, QuestionId, SequenceNum, FormatId, ? PhotoPath, Level, ? Link 
+                {
+                    Text = infoCreateViewModel.Text,
+                    QuestionId = infoCreateViewModel.QuestionId,
+                    SequenceNum = infoCreateViewModel.SequenceNum,
+                    FormatId = infoCreateViewModel.FormatId,
+                    Level = infoCreateViewModel.Level,
+                    Link = infoCreateViewModel.Link ?? null
+                };
+                if (infoCreateViewModel.UploadFile != null)
+                {
+                    info.PhotoPath = UploadFile(infoCreateViewModel.UploadFile);
+                }
                 try
                 {
                     await _infoRepo.AddAsync(info);
@@ -56,14 +109,17 @@ namespace SAKnowledgeBase.Controllers
                 }
             }
             ModelState.AddModelError(string.Empty, $"Что-то пошло не так, недопустимая модель");
-
-            return View(info);
+            await LoadDropdownList();
+            return View(infoCreateViewModel);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var info = await _infoRepo.GetAsync(id);
+            var themeId = info.Question.ThemeId;
+            await LoadDropdownList();
             return View(info);
         }
 
@@ -129,6 +185,53 @@ namespace SAKnowledgeBase.Controllers
         {
             var info = await _infoRepo.GetAsync(id);
             return View(info);
+        }
+
+
+        private string UploadFile(IFormFile formFile)
+        {
+            
+            string TargetPath = Path.Combine(_environment.WebRootPath, "img", formFile.FileName);
+            using (var stream = new FileStream(TargetPath, FileMode.Create))
+            {
+                formFile.CopyTo(stream);
+            }
+            return formFile.FileName;
+        }
+
+        private async Task LoadDropdownListIndex()
+        {
+            var themesData = await _themeRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
+            ViewBag.Themes = themesData
+                     .Select(i => new SelectListItem
+                     {
+                         Value = i.Id.ToString(),
+                         Text = i.ThemeName
+                     }).ToList();
+        }
+        private async Task LoadDropdownList()
+        {
+            //themeId = 2;
+            var questionsData = await _questionRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
+            //var questionsData = await _questionRepo.Items.Where(x => x.ThemeId == themeId).OrderBy(x => x.SequenceNum).ToListAsync();
+            ViewBag.Questions = questionsData
+                     .Select(i => new SelectListItem
+                     {
+                         Value = i.Id.ToString(),
+                         Text = i.QuestionName
+                     }).ToList();
+
+            var textFormatsData = await _textFormatRepo.Items.ToListAsync();
+            ViewBag.TextFormats = textFormatsData
+                     .Select(i => new SelectListItem
+                     {
+                         Value = i.Id.ToString(),
+                         Text = i.FormatName
+                     }).ToList();
+
+            
+        //Level
+        //ViewBag.PriorityTypesRadio = Enum.GetValues(typeof(PriorityType)).Cast<PriorityType>().ToArray();
         }
     }
 }

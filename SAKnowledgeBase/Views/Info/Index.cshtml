@@ -1,13 +1,32 @@
-﻿@using SAKnowledgeBase.DataBase.Entities;
+﻿@using SAKnowledgeBase.Models.ViewModel
 
-@model List<Info>
+@model InfoViewModel
 
 <div class="row">
+    
+ @*    <div class="col-md-4">
+        <select class="form-select" asp-items="Model.ThemesSelectListItem" asp-for="@Model.SelectedThemeId">
+            <option> --- Choose Theme for create new info --- </option>
+        </select>
+    </div> *@
     <div class="col-md-8">
         <a asp-action="Create" asp-controller="Info" class="btn btn-success">
             Create
         </a>
     </div>
+
+ @*    <div class="col-md-4">
+        <select class="form-select" asp-items="@Model.ThemesSelectListItem" asp-for="@Model.SelectedThemeId">
+            <option> --- Choose Theme for create new info --- </option>
+        </select>
+    </div> *@
+    @* <div class="col-md-8"> 
+        <form asp-controller="Info" asp-action="Index" method="post">
+            <input type="Submit" value="Create" class="btn btn-success"/>
+        </form>
+    </div> *@
+
+
     <div class="col-md-2">
         <a asp-action="UploadInfoExcel" asp-controller="File" class="btn btn-success">
             Upload Excel File
@@ -20,22 +39,25 @@
             </button>
         </form>
     </div>
+
     <div class="col-md-12">
         <table class="table">
             <thead>
                 <tr>
                     <td>Manage</td>
                     <td>Text</td>
+                    <td>Photo</td>
                     <td>Sequence Num </td>
                     <td>Question Name</td>
                     <td>Question Sequence Num</td>
                     <td>Theme Name</td>
                     <td>Theme Sequence Num</td>
                     <td>Info</td>
+                   
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @foreach (var item in Model.Infos)
                 {
                     <tr>
                         <td>
@@ -47,6 +69,23 @@
                             </a>
                         </td>
                         <td>@item.Text</td>
+                        <td>
+                            @* @{
+                        string imagePath = "~/img/" + @item.PhotoPath;
+                        }
+                        <img src="@imagePath" class="img-thumbnail" height="40" width="40" asp-append-version="true" /> *@
+
+                            @if (@item.PhotoPath != null)
+                            {
+                                string imagePath = "~/img/" + item.PhotoPath;
+
+                                <img src="@imagePath" class="img-thumbnail" height="100" width="100" asp-append-version="true" />
+                            }
+                            @*     else
+                        {
+                        <p>no photo</p>
+                        } *@
+                        </td>
                         <td>@item.SequenceNum</td>
                         <td>@item.Question.QuestionName</td>
                         <td>@item.Question.SequenceNum</td>

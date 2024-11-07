@@ -56,9 +56,12 @@
                 {
                     <p class="card-text">No link in info.</p>
                 }
+
                 @if (@Model.PhotoPath != null)
                 {
-                    <p class="card-text">@Model.Link</p>
+                    string imagePath = "~/img/" + Model.PhotoPath;
+                    <img src="@imagePath" class="img-thumbnail" height="100" width="100" asp-append-version="true" />
+                    <p class="card-text">@* Photo: *@</p>
                 }
                 else
                 {
