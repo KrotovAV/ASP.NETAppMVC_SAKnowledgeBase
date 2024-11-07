@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SAKnowledgeBase.DataBase.Entities;
+using SAKnowledgeBase.Models.ViewModel;
 using SAKnowledgeBase.Repositories.Interfaces;
 
 namespace SAKnowledgeBase.Controllers
@@ -8,17 +10,60 @@ namespace SAKnowledgeBase.Controllers
     public class QuestionController : Controller
     {
         private IRepository<Question> _questionRepo;
+        private IRepository<Theme> _themeRepo;
 
-        public QuestionController(IRepository<Question> questionRepo)
+        public QuestionController(IRepository<Question> questionRepo, IRepository<Theme> themeRepo)
         {
             _questionRepo = questionRepo;
+            _themeRepo = themeRepo;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int searchTheme, string searchFor)
         {
-            var questions = await _questionRepo.Items
-                .OrderBy(x => x.SequenceNum)
-                .OrderBy(x => x.Theme.SequenceNum)
-                .ToListAsync();
+            List<Question> questions = new List<Question>();
+            if (searchTheme != 0 & searchFor != null)
+            {
+                IQueryable<Question> questionsData = _questionRepo.Items;
+
+                questionsData = questionsData.Where(x => x.ThemeId == searchTheme);
+
+                questionsData = questionsData.Where(x => x.QuestionName.ToLower().Contains(searchFor.ToLower()));
+
+                questions = questionsData
+                    .OrderBy(x => x.SequenceNum)
+                    .OrderBy(x => x.Theme.SequenceNum)
+                    .ToList();
+            }
+            else if (searchTheme != 0)
+            {
+                IQueryable<Question> questionsData = _questionRepo.Items;
+
+                questionsData = questionsData.Where(x => x.ThemeId == searchTheme);
+
+                questions = questionsData
+                   .OrderBy(x => x.SequenceNum)
+                   .OrderBy(x => x.Theme.SequenceNum)
+                   .ToList();
+            }
+            else if (searchFor != null)
+            {
+                IQueryable<Question> questionsData = _questionRepo.Items;
+
+                questionsData = questionsData.Where(x => x.QuestionName.ToLower().Contains(searchFor.ToLower()));
+
+                questions = questionsData
+                   .OrderBy(x => x.SequenceNum)
+                   .OrderBy(x => x.Theme.SequenceNum)
+                   .ToList();
+            }
+            else
+            {
+                questions = await _questionRepo.Items
+                    .OrderBy(x => x.SequenceNum)
+                    .OrderBy(x => x.Theme.SequenceNum)
+                    .ToListAsync();
+            }
+
+            await LoadDropdownListIndex();
             return View(questions);
         }
 
@@ -122,6 +167,18 @@ namespace SAKnowledgeBase.Controllers
         {
             var question = await _questionRepo.GetAsync(id);
             return View(question);
+        }
+
+
+        private async Task LoadDropdownListIndex()
+        {
+            var themesData = await _themeRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
+            ViewBag.Themes = themesData
+                     .Select(i => new SelectListItem
+                     {
+                         Value = i.Id.ToString(),
+                         Text = i.ThemeName
+                     }).ToList();
         }
     }
 }

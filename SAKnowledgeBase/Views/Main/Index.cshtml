@@ -15,22 +15,62 @@
         }
     </div>
 </div>
-<br />
-<div class="row">
-    <div class="col-md-12">
-        @foreach (var item in Model.Questions)
-        {
-            <a class="navbar-brand" asp-area="" asp-controller="Main" asp-action="Index" asp-route-id="@item.Id">
-                @item.QuestionName
-            </a>
-        }
+<hr align="center" width="100%" size="3"/>
+
+<div class="scrollable" style="overflow-y: scroll; overflow-x: hidden; height:110px;">
+    <div class="row">
+        <div class="col-md-12">
+            @foreach (var item in Model.Questions)
+            {
+                <a class="navbar-brand" asp-area="" asp-controller="Main" asp-action="Question" asp-route-id="@item.Id">
+                    @item.QuestionName
+                </a>
+            }
+        </div>
     </div>
 </div>
-<br />
+@* <div class="scrollable-div" style="overflow: auto; height:200px; width:400px;">
+    <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut consequatur
+        alias ipsam animi. Nobis ipsam incidunt sapiente qui, aspernatur culpa,
+        ullam repellat ad fuga distinctio consequuntur odit quia laboriosam
+        nostrum!
+    </p>
+    <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, quae
+        fugit vero unde molestias quam cum dolorum veritatis fugiat quasi eius
+        eaque voluptas totam illo. Provident atque in quisquam iusto?
+    </p>
+    <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, quae
+        fugit vero unde molestias quam cum dolorum veritatis fugiat quasi eius
+        eaque voluptas totam illo. Provident atque in quisquam iusto?
+    </p>
+    <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, quae
+        fugit vero unde molestias quam cum dolorum veritatis fugiat quasi eius
+        eaque voluptas totam illo. Provident atque in quisquam iusto?
+    </p>
+    <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, quae
+        fugit vero unde molestias quam cum dolorum veritatis fugiat quasi eius
+        eaque voluptas totam illo. Provident atque in quisquam iusto?
+    </p>
+</div> *@
+
+@* <hr align="center" width="100%" size="4" /> *@
 <div class="row">
     <div class="col-md-12">
         @foreach (var item in Model.Infos)
         {
+            @if (@item.TextFormat.TextSize > 5)
+            {
+                <hr align="center" width="100%" size="3" />
+            }
+            @if (@item.TextFormat.TextSize >= 5)
+            {
+                <br />
+            }
             <font size="@item.TextFormat.TextSize">
                 @if (@item.TextFormat.Bold == true)
                 {

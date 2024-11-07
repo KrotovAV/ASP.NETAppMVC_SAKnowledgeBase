@@ -60,14 +60,15 @@
                 @if (@Model.PhotoPath != null)
                 {
                     string imagePath = "~/img/" + Model.PhotoPath;
-                    <img src="@imagePath" class="img-thumbnail" height="100" width="100" asp-append-version="true" />
+                    @* <img src="@imagePath" class="img-thumbnail" height="100" width="100" asp-append-version="true" /> *@
+                    <img src="@imagePath" class="img-fluid" width="600" height="800" asp-append-version="true" />
                     <p class="card-text">@* Photo: *@</p>
                 }
                 else
                 {
                     <p class="card-text">No photo in info.</p>
                 }
-                <a class="btn btn-secondary" asp-controller="Info" asp-action="Index">Cancel</a>
+                <a class="btn btn-secondary mt-1" asp-controller="Info" asp-action="Index">Cancel</a>
             </div>
 
         </div>

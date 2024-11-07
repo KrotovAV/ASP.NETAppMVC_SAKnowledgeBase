@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using SAKnowledgeBase.DataBase.Entities;
 using SAKnowledgeBase.Models.ViewModel;
 using SAKnowledgeBase.Repositories.Interfaces;
-using System;
 
 namespace SAKnowledgeBase.Controllers
 {
@@ -30,37 +29,80 @@ namespace SAKnowledgeBase.Controllers
             _environment = environment;
         }
         
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int searchTheme, string searchFor)
         {
-            InfoViewModel infoViewModel = new InfoViewModel();  
-            var infos = await _infoRepo.Items
-                .OrderBy(x => x.SequenceNum)
-                .OrderBy(x => x.Question.SequenceNum)
-                .OrderBy(x => x.Question.Theme.SequenceNum)
-                .ToListAsync();
+            InfoViewModel infoViewModel = new InfoViewModel();
 
-            //var themes = await _themeRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
-            var themesData = await _themeRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
+            if (searchTheme != 0 & searchFor != null)
+            {
+                IQueryable<Info> infos = _infoRepo.Items;
+                infos = infos.Where(x => x.Question.ThemeId == searchTheme);
 
-            infoViewModel.Infos = infos;
-            infoViewModel.ThemesSelectListItem = themesData
-                     .Select(i => new SelectListItem
-                     {
-                         Value = i.Id.ToString(),
-                         Text = i.ThemeName
-                     }).ToList();
+                infos = infos.Where(ser =>ser.Text.ToLower().Contains(searchFor.ToLower()));
 
-            //await LoadDropdownListIndex();
-            //return View(infos);
+                infoViewModel.Infos = infos
+                    .OrderBy(x => x.SequenceNum)
+                    .OrderBy(x => x.Question.SequenceNum)
+                    .OrderBy(x => x.Question.Theme.SequenceNum)
+                    .ToList();
+            }
+            else if (searchTheme != 0)
+            {
+                IQueryable<Info> infos = _infoRepo.Items;
+                infos = infos.Where(x => x.Question.ThemeId == searchTheme);
+                infoViewModel.Infos = infos
+                    .OrderBy(x => x.SequenceNum)
+                    .OrderBy(x => x.Question.SequenceNum)
+                    .OrderBy(x => x.Question.Theme.SequenceNum)
+                    .ToList();
+            }
+            else if (searchFor != null)
+            {
+                IQueryable<Info> infos = _infoRepo.Items;
+                infos = infos.Where(ser => ser.Text.ToLower().Contains(searchFor.ToLower()));
+
+                infoViewModel.Infos = infos
+                    .OrderBy(x => x.SequenceNum)
+                    .OrderBy(x => x.Question.SequenceNum)
+                    .OrderBy(x => x.Question.Theme.SequenceNum)
+                    .ToList();
+            }
+            else
+            {
+                infoViewModel.Infos = await _infoRepo.Items
+                   .OrderBy(x => x.SequenceNum)
+                   .OrderBy(x => x.Question.SequenceNum)
+                   .OrderBy(x => x.Question.Theme.SequenceNum)
+                   .ToListAsync();
+            }
+            
+
+            //var themesData = await _themeRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
+            //infoViewModel.ThemesItems = themesData
+            //         .Select(i => new SelectListItem
+            //         {
+            //             Value = i.Id.ToString(),
+            //             Text = i.ThemeName
+            //         }).ToList();
+
+            //IQueryable<Question> questions = _questionRepo.Items;
+            //if (searchTheme != null)
+            //{
+            //    questions = questions.Where(x => x.ThemeId == searchTheme);
+            //}
+
+            //var questionsData = questions.OrderBy(x => x.SequenceNum).ToList();
+
+            //infoViewModel.QuestionsItems = questionsData
+            //         .Select(i => new SelectListItem
+            //         {
+            //             Value = i.Id.ToString(),
+            //             Text = i.QuestionName
+            //         }).ToList();
+
+            await LoadDropdownListIndex();
             return View(infoViewModel);
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> Index(InfoViewModel infoViewModel)
-        //{
-        //    var selectedThemeId = infoViewModel.SelectedThemeId;
-        //    return RedirectToAction("Create");
-        //}
 
 
         [HttpGet]
@@ -211,6 +253,15 @@ namespace SAKnowledgeBase.Controllers
         }
         private async Task LoadDropdownList()
         {
+            var themesData = await _themeRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
+            ViewBag.Themes = themesData
+                     .Select(i => new SelectListItem
+                     {
+                         Value = i.Id.ToString(),
+                         Text = i.ThemeName
+                     }).ToList();
+
+
             //themeId = 2;
             var questionsData = await _questionRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
             //var questionsData = await _questionRepo.Items.Where(x => x.ThemeId == themeId).OrderBy(x => x.SequenceNum).ToListAsync();

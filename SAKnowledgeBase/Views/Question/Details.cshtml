@@ -3,7 +3,6 @@
 @model Question
 
 <div class="row">
-   @*  <div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-12"> *@
     <div class="col-lg-12 offset-lg-0 col-md-11 offset-md-0 col-12">
         <div class="card">
             <div class="card-header">
@@ -20,6 +19,7 @@
                             <tr>
                                 <td>Id</td>
                                 <td>Text</td>
+                                <td>Photo</td>
                                 <td>Sequence</td>
                                 <td>Info</td>
                             </tr>
@@ -56,17 +56,23 @@
                                             }
                                             <br />
                                         </font>
-
-
-
+                                    </td>
+                                    <td>
+                                        @if (@item.PhotoPath != null)
+                                        {
+                                            string imagePath = "~/img/" + @item.PhotoPath;
+                                            <img src="@imagePath" class="img-thumbnail" height="100" width="100" asp-append-version="true" />
+                                            <p class="card-text">@* Photo: *@</p>
+                                        }
+                                        
                                     </td>
 
                                     <td>@item.SequenceNum</td>
                                     <td>
-                                        <a asp-action="Details" asp-controller="Info" class="btn btn-primary" asp-route-id="@item.Id">
+                                        <a asp-action="Details" asp-controller="Info" class="btn btn-primary mt-1" asp-route-id="@item.Id">
                                             View
                                         </a>
-                                        <a asp-action="Edit" asp-controller="Info" class="btn btn-warning" asp-route-id="@item.Id">
+                                        <a asp-action="Edit" asp-controller="Info" class="btn btn-warning mt-1" asp-route-id="@item.Id">
                                             Edit
                                         </a>
                                     </td>
