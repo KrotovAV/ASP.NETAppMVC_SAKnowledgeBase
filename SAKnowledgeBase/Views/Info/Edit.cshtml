@@ -1,26 +1,71 @@
 ﻿@using SAKnowledgeBase.DataBase.Entities;
+@using SAKnowledgeBase.Models.ViewModel
 
-@model Info
+@model InfoEditViewModel
 
 <form asp-action="Edit" asp-controller="Info" method="post">
     <input type="hidden" asp-for="Id" />
     <div class="row">
         <div class="col-lg-12">
             <div class="form-group">
-                <label>Text:</label>
-                <input asp-for="Text" type="text" class="form-control required" placeholder="Enter text" tabindex="1">
-                <label> QuestionId:</label>
-                <input asp-for="QuestionId" type="text" class="form-control required" placeholder="Enter text" tabindex="1">
-                <label> SequenceNum:</label>
-                <input asp-for="SequenceNum" type="text" class="form-control required" placeholder="Enter text" tabindex="1">
-                <label> FormatId:</label>
-                <input asp-for="FormatId" type="text" class="form-control required" placeholder="Enter text" tabindex="1">
-                <label> PhotoPath:</label>
-                <input asp-for="PhotoPath" type="text" class="form-control required" placeholder="Enter text" tabindex="1">
-                <label> Level:</label>
-                <input asp-for="Level" type="text" class="form-control required" placeholder="Enter text" tabindex="1">
-                <label> Link:</label>
-                <input asp-for="Link" type="text" class="form-control required" placeholder="Enter text" tabindex="1">
+                <div class="form-group">
+                    <label>Text:</label>
+                    <input asp-for="@Model.Text" type="text" class="form-control required" placeholder="Enter text" tabindex="1">
+                    <span asp-validation-for="@Model.Text" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Question:</label>
+                    <select class="form-select" asp-items="ViewBag.Questions" asp-for="@Model.QuestionId">
+                        <option> --- Choose Question --- </option>
+                    </select>
+                    <span asp-validation-for="QuestionId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Sequence Num:</label>
+                    <input asp-for="@Model.SequenceNum" type="text" class="form-control required" placeholder="Enter Sequence Num" tabindex="1">
+                    <span asp-validation-for="@Model.SequenceNum" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Format:</label>
+                    <select class="form-select" asp-items="ViewBag.TextFormats" asp-for="@Model.FormatId">
+                        <option> --- Choose Format --- </option>
+                    </select>
+                    <span asp-validation-for="FormatId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Photo:</label>
+                </div>
+                <div class="form-group">
+                    @if (@Model.PhotoPath != null)
+                    {
+                        string imagePath = "~/img/" + @Model.PhotoPath;
+                        <img src="@imagePath" class="img-thumbnail" height="100" width="100" asp-append-version="true" />
+                    }
+                    else
+                    {
+                        <p class="card-text">no photo</p>
+                    }
+                </div>
+                <br />
+                <div class="form-group">
+                    <label>To change photo:</label>
+                    <label asp-for="@Model.UploadFile" class="form-label"></label>
+                    <input asp-for="@Model.UploadFile" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Level:</label>
+                    <input asp-for="@Model.Level" type="text" class="form-control required" placeholder="Enter Level" tabindex="1">
+                    <span asp-validation-for="@Model.Level" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label>Link:</label>
+                    <input asp-for="@Model.Link" type="text" class="form-control required" placeholder="Enter Link" tabindex="1">
+                    <span asp-validation-for="@Model.Link" class="text-danger"></span>
+                </div>
             </div>
 
             <div class="form-group">

@@ -63,7 +63,7 @@ namespace SAKnowledgeBase.Controllers
                     .ToListAsync();
             }
 
-            await LoadDropdownListIndex();
+            await LoadDropdownListTheme();
             return View(questions);
         }
 
@@ -79,16 +79,23 @@ namespace SAKnowledgeBase.Controllers
 
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            await LoadDropdownListTheme();
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Question question)
+        public async Task<IActionResult> Create(QuestionCreateViewModel questionCreateViewModel)
         {
             if (ModelState.IsValid)
             {
+                Question question = new Question
+                {
+                    QuestionName = questionCreateViewModel.QuestionName,
+                    SequenceNum = questionCreateViewModel.SequenceNum,
+                    ThemeId = questionCreateViewModel.ThemeId
+                };
                 try
                 {
                     await _questionRepo.AddAsync(question);
@@ -100,29 +107,41 @@ namespace SAKnowledgeBase.Controllers
                 }
             }
             ModelState.AddModelError(string.Empty, $"Что-то пошло не так, недопустимая модель");
-
-            return View(question);
+            await LoadDropdownListTheme();
+            return View(questionCreateViewModel);
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var question = await _questionRepo.GetAsync(id);
-            return View(question);
+
+            QuestionEditViewModel questionEditViewMode = new QuestionEditViewModel
+            {
+                Id = question.Id,
+                QuestionName = question.QuestionName,
+                SequenceNum = question.SequenceNum,
+                ThemeId = question.ThemeId
+            };
+            await LoadDropdownListTheme();
+            return View(questionEditViewMode);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Question question)
+        public async Task<IActionResult> Edit(QuestionEditViewModel questionEditViewModel)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var questionToEdit = await _questionRepo.GetAsync(question.Id);
+                    var questionToEdit = await _questionRepo.GetAsync(questionEditViewModel.Id);
 
                     if (questionToEdit != null)
                     {
-                        questionToEdit.QuestionName = question.QuestionName;
+                        questionToEdit.Id = questionEditViewModel.Id;
+                        questionToEdit.QuestionName = questionEditViewModel.QuestionName;
+                        questionToEdit.ThemeId = questionEditViewModel.ThemeId;
+                        questionToEdit.SequenceNum = questionEditViewModel.SequenceNum;
                         await _questionRepo.UpdateAsync(questionToEdit);
 
                         return RedirectToAction("Index");
@@ -135,8 +154,8 @@ namespace SAKnowledgeBase.Controllers
             }
 
             ModelState.AddModelError(string.Empty, $"Что-то пошло не так, недопустимая модель");
-
-            return View(question);
+            await LoadDropdownListTheme();
+            return View(questionEditViewModel);
         }
 
         [HttpGet]
@@ -170,7 +189,7 @@ namespace SAKnowledgeBase.Controllers
         }
 
 
-        private async Task LoadDropdownListIndex()
+        private async Task LoadDropdownListTheme()
         {
             var themesData = await _themeRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
             ViewBag.Themes = themesData

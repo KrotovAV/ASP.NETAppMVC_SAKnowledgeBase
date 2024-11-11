@@ -26,52 +26,57 @@
         }
     </div>
 </div>
-@* <hr align="center" width="100%" size="4" /> *@
-<div class="row">
-    <div class="col-md-12">
-        @foreach (var item in Model.Infos)
-        {
-            @* @item.TextFormat.TextSize *@
-            @if (@item.TextFormat.TextSize > 5)
+<h10>
+    <br />
+</h10>
+@* <hr align="center" width="100%" size="2" /> *@
+<div class="scrollable" style="overflow-y: scroll; overflow-x: hidden; height:600px;">
+    <div class="row">
+        <div class="col-md-12">
+            @foreach (var item in Model.Infos)
             {
-                <hr align="center" width="100%" size="3" />
-            }
-            @if (@item.TextFormat.TextSize >= 5)
-            {
-                <br />
-            }
-            <font size="@item.TextFormat.TextSize">
-                @if (@item.TextFormat.Bold == true)
+                @* @item.TextFormat.TextSize *@
+                @if (@item.TextFormat.TextSize > 5)
                 {
-                    @if (@item.TextFormat.Tilt == true)
+                    <hr align="center" width="100%" size="3" />
+                }
+                @if (@item.TextFormat.TextSize >= 5)
+                {
+                    <br />
+                }
+                <font size="@item.TextFormat.TextSize">
+                    @if (@item.TextFormat.Bold == true)
                     {
-                        <i>  <b>@item.Text</b> </i>
+                        @if (@item.TextFormat.Tilt == true)
+                        {
+                            <i>  <b>@item.Text</b> </i>
+                        }
+                        else
+                        {
+                             <b>@item.Text</b>
+                        }
                     }
                     else
                     {
-                         <b>@item.Text</b>
+                        @if (@item.TextFormat.Tilt == true)
+                        {
+                            <i>@item.Text</i>
+                        }
+                        else
+                        {
+                            @item.Text
+                        }
                     }
-                }
-                else
+                    <br />
+                </font>
+                @if (@item.PhotoPath != null)
                 {
-                    @if (@item.TextFormat.Tilt == true)
-                    {
-                        <i>@item.Text</i>
-                    }
-                    else
-                    {
-                        @item.Text
-                    }
+                    string imagePath = "~/img/" + @item.PhotoPath;
+                    <img src="@imagePath" class="img-fluid" width="600" height="800" asp-append-version="true" />
+                    <br />
+                    <br />
                 }
-                <br />
-            </font>
-            @if (@item.PhotoPath != null)
-            {
-                string imagePath = "~/img/" + @item.PhotoPath;
-                <img src="@imagePath" class="img-fluid" width="600" height="800" asp-append-version="true" />
-                <br />
-                <br />
             }
-        }
+        </div>
     </div>
 </div>

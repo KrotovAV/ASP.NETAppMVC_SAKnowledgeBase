@@ -73,6 +73,7 @@ namespace SAKnowledgeBase.Controllers
                     if (themeToEdit != null)
                     {
                         themeToEdit.ThemeName = theme.ThemeName;
+                        themeToEdit.SequenceNum = theme.SequenceNum;
                         await _themeRepo.UpdateAsync(themeToEdit);
 
                         return RedirectToAction("Index");

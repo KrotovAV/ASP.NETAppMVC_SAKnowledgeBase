@@ -75,30 +75,6 @@ namespace SAKnowledgeBase.Controllers
                    .OrderBy(x => x.Question.Theme.SequenceNum)
                    .ToListAsync();
             }
-            
-
-            //var themesData = await _themeRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
-            //infoViewModel.ThemesItems = themesData
-            //         .Select(i => new SelectListItem
-            //         {
-            //             Value = i.Id.ToString(),
-            //             Text = i.ThemeName
-            //         }).ToList();
-
-            //IQueryable<Question> questions = _questionRepo.Items;
-            //if (searchTheme != null)
-            //{
-            //    questions = questions.Where(x => x.ThemeId == searchTheme);
-            //}
-
-            //var questionsData = questions.OrderBy(x => x.SequenceNum).ToList();
-
-            //infoViewModel.QuestionsItems = questionsData
-            //         .Select(i => new SelectListItem
-            //         {
-            //             Value = i.Id.ToString(),
-            //             Text = i.QuestionName
-            //         }).ToList();
 
             await LoadDropdownListIndex();
             return View(infoViewModel);
@@ -160,29 +136,81 @@ namespace SAKnowledgeBase.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var info = await _infoRepo.GetAsync(id);
-            var themeId = info.Question.ThemeId;
+
+            InfoEditViewModel infoEditViewModel = new InfoEditViewModel
+            {
+                Id = info.Id,
+                Text = info.Text,
+                QuestionId = info.QuestionId,
+                SequenceNum = info.SequenceNum,
+                FormatId = info.FormatId,
+                Level = info.Level,
+                PhotoPath = info.PhotoPath,
+                Link = info.Link ?? null
+            };
+
+            //var themeId = info.Question.ThemeId;
             await LoadDropdownList();
-            return View(info);
+            return View(infoEditViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Info info)
+        public async Task<IActionResult> Edit(InfoEditViewModel infoEditViewModel)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var infoToEdit = await _infoRepo.GetAsync(info.Id);
+                    var infoToEdit = await _infoRepo.GetAsync(infoEditViewModel.Id);
 
                     if (infoToEdit != null)
                     {
-                        infoToEdit.Text = info.Text;
-                        infoToEdit.QuestionId = info.QuestionId;
-                        infoToEdit.SequenceNum = info.SequenceNum;
-                        infoToEdit.FormatId = info.FormatId;
-                        infoToEdit.PhotoPath = info.PhotoPath;
-                        infoToEdit.Level = info.Level;
-                        infoToEdit.Link = info.Link;
+                        infoToEdit.Id = infoEditViewModel.Id;
+                        infoToEdit.Text = infoEditViewModel.Text;
+                        infoToEdit.QuestionId = infoEditViewModel.QuestionId;
+                        infoToEdit.SequenceNum = infoEditViewModel.SequenceNum;
+                        infoToEdit.FormatId = infoEditViewModel.FormatId;
+                        //infoToEdit.PhotoPath = infoEditViewModel.PhotoPath;
+                        infoToEdit.Level = infoEditViewModel.Level;
+                        infoToEdit.Link = infoEditViewModel.Link;
+
+
+                        if (infoEditViewModel.UploadFile != null) { }
+
+
+                        if (infoToEdit.PhotoPath == null && infoEditViewModel.UploadFile != null) //не было - добавили
+                        {
+                            //закачать новый файл и добавить значение в переменную
+                            infoToEdit.PhotoPath = UploadFile(infoEditViewModel.UploadFile);
+                        }
+                        else if(infoToEdit.PhotoPath != null && infoEditViewModel.UploadFile == null) // был - теперь нету
+                        {
+                            //удалить старый файл
+                            string exitingFile = Path.Combine(_environment.WebRootPath, "img", infoToEdit.PhotoPath);
+                            System.IO.File.Delete(exitingFile);
+                            //изменить значение переменно на нуль
+                            infoToEdit.PhotoPath = null;
+                        }
+                        else if(infoToEdit.PhotoPath != null && infoEditViewModel.UploadFile != null) // был один - стал другой
+                        {
+                            // удалить старый файл
+                            string exitingFile = Path.Combine(_environment.WebRootPath, "img", infoToEdit.PhotoPath);
+                            System.IO.File.Delete(exitingFile);
+                            //закачать новый файл и добавить значение в переменную
+                            infoToEdit.PhotoPath = UploadFile(infoEditViewModel.UploadFile);
+                        }
+
+
+                        //if (infoEditViewModel.UploadFile != null)
+                        //{
+                        //    if (infoToEdit.PhotoPath != null)
+                        //    {
+                        //        string exitingFile = Path.Combine(_environment.WebRootPath, "img", infoToEdit.PhotoPath);
+                        //        System.IO.File.Delete(exitingFile);
+                        //    }
+                        //    infoToEdit.PhotoPath = UploadFile(infoEditViewModel.UploadFile);
+                        //}
+
                         await _infoRepo.UpdateAsync(infoToEdit);
 
                         return RedirectToAction("Index");
@@ -195,8 +223,8 @@ namespace SAKnowledgeBase.Controllers
             }
 
             ModelState.AddModelError(string.Empty, $"Что-то пошло не так, недопустимая модель");
-
-            return View(info);
+            await LoadDropdownList();
+            return View(infoEditViewModel);
         }
 
         [HttpGet]
@@ -212,7 +240,7 @@ namespace SAKnowledgeBase.Controllers
 
             var infoToDelete = await _infoRepo.GetAsync(id);
 
-            if (infoToDelete.QuestionId != 0) //РАЗОБРАТЬСЯ для чего это
+            if (infoToDelete.QuestionId != 0)
             {
                 return RedirectToAction("Warning", new { id = infoToDelete.Id });
             }
@@ -228,7 +256,6 @@ namespace SAKnowledgeBase.Controllers
             var info = await _infoRepo.GetAsync(id);
             return View(info);
         }
-
 
         private string UploadFile(IFormFile formFile)
         {

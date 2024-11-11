@@ -1,6 +1,7 @@
 ﻿@using SAKnowledgeBase.DataBase.Entities;
+@using SAKnowledgeBase.Models.ViewModel
 
-@model Question
+@model QuestionEditViewModel
 
 <form asp-action="Edit" asp-controller="Question" method="post">
     <input type="hidden" asp-for="Id" />
@@ -8,13 +9,22 @@
         <div class="col-lg-12">
             <div class="form-group">
                 <label>Question Name:</label>
-                <input asp-for="QuestionName" type="text" class="form-control required" placeholder="Enter Question name" tabindex="1">
-                <label>ThemeId:</label>
-                <input asp-for="ThemeId" type="int" class="form-control required" placeholder="Enter Theme Id" tabindex="1">
-                <label>SequenceNum:</label>
-                <input asp-for="SequenceNum" type="int" class="form-control required" placeholder="Enter Sequence number" tabindex="1">
+                <input asp-for="@Model.QuestionName" type="text" class="form-control required" placeholder="Enter text" tabindex="1">
+                <span asp-validation-for="@Model.QuestionName" class="text-danger"></span>
             </div>
-
+            <div class="form-group">
+                <label>Sequence Num:</label>
+                <input asp-for="@Model.SequenceNum" type="text" class="form-control required" placeholder="Enter Sequence Num" tabindex="1">
+                <span asp-validation-for="@Model.SequenceNum" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Theme:</label>
+                <select class="form-select" asp-items="ViewBag.Themes" asp-for="@Model.ThemeId">
+                    <option> --- Choose Theme --- </option>
+                </select>
+                <span asp-validation-for="ThemeId" class="text-danger"></span>
+            </div>
+            
             <div class="form-group">
                 <div asp-validation-summary="All" class="text-danger"></div>
             </div>

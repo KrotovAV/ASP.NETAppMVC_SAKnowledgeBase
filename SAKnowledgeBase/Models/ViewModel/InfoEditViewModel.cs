@@ -1,10 +1,11 @@
-﻿using SAKnowledgeBase.DataBase.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SAKnowledgeBase.Models.ViewModel
 {
-    public class InfoCreateViewModel
+    public class InfoEditViewModel
     {
+        public int Id { get; set; }
+
         [Required]
         [Display(Name = "Text")]
         [StringLength(50, MinimumLength = 3)]
@@ -23,21 +24,20 @@ namespace SAKnowledgeBase.Models.ViewModel
         [Required]
         [Range(0, 10000000000)]
         public int SequenceNum { get; set; }
-        
+
         [Required]
         [Range(0, 10)]
         public int FormatId { get; set; }
-        
-        //public string? PhotoPath { get; set; }
+
+        public string? PhotoPath { get; set; }
         public IFormFile? UploadFile { get; set; }
 
         [Required]
         [Range(0, 4)]
         public int Level { get; set; }
-        
+
         [Display(Name = "Link")]
         [StringLength(50, MinimumLength = 3)]
         public string? Link { set; get; }
-       
     }
 }
