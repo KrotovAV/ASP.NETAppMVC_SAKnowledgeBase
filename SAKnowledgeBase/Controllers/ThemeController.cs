@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SAKnowledgeBase.DataBase.Entities;
+using SAKnowledgeBase.Models.ViewModel;
 using SAKnowledgeBase.Repositories.Interfaces;
 
 namespace SAKnowledgeBase.Controllers
@@ -35,10 +36,15 @@ namespace SAKnowledgeBase.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Theme theme)
+        public async Task<IActionResult> Create(ThemeCreateViewModel themeCreateViewModel)
         {
             if (ModelState.IsValid)
             {
+                Theme theme = new Theme
+                {
+                    ThemeName = themeCreateViewModel.ThemeName,
+                    SequenceNum = themeCreateViewModel.SequenceNum,
+                };
                 try
                 {
                     await _themeRepo.AddAsync(theme);
@@ -51,29 +57,37 @@ namespace SAKnowledgeBase.Controllers
             }
             ModelState.AddModelError(string.Empty, $"Что-то пошло не так, недопустимая модель");
 
-            return View(theme);
+            return View(themeCreateViewModel);
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var theme = await _themeRepo.GetAsync(id);
-            return View(theme);
+
+            ThemeEditViewModel themeEditViewModel = new ThemeEditViewModel
+            {
+                Id = theme.Id,
+                ThemeName = theme.ThemeName,
+                SequenceNum = theme.SequenceNum,
+            };
+            return View(themeEditViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Theme theme)
+        public async Task<IActionResult> Edit(ThemeEditViewModel themeEditViewModel)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var themeToEdit = await _themeRepo.GetAsync(theme.Id);
+                    var themeToEdit = await _themeRepo.GetAsync(themeEditViewModel.Id);
 
                     if (themeToEdit != null)
                     {
-                        themeToEdit.ThemeName = theme.ThemeName;
-                        themeToEdit.SequenceNum = theme.SequenceNum;
+                        themeToEdit.Id = themeEditViewModel.Id;
+                        themeToEdit.ThemeName = themeEditViewModel.ThemeName;
+                        themeToEdit.SequenceNum = themeEditViewModel.SequenceNum;
                         await _themeRepo.UpdateAsync(themeToEdit);
 
                         return RedirectToAction("Index");
@@ -87,7 +101,7 @@ namespace SAKnowledgeBase.Controllers
 
             ModelState.AddModelError(string.Empty, $"Что-то пошло не так, недопустимая модель");
 
-            return View(theme);
+            return View(themeEditViewModel);
         }
 
         [HttpGet]

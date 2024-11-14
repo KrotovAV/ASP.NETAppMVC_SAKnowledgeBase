@@ -170,12 +170,11 @@ namespace SAKnowledgeBase.Controllers
                         infoToEdit.QuestionId = infoEditViewModel.QuestionId;
                         infoToEdit.SequenceNum = infoEditViewModel.SequenceNum;
                         infoToEdit.FormatId = infoEditViewModel.FormatId;
-                        //infoToEdit.PhotoPath = infoEditViewModel.PhotoPath;
+
+                        infoToEdit.PhotoPath = infoEditViewModel.PhotoPath;
+
                         infoToEdit.Level = infoEditViewModel.Level;
                         infoToEdit.Link = infoEditViewModel.Link;
-
-
-                        if (infoEditViewModel.UploadFile != null) { }
 
 
                         if (infoToEdit.PhotoPath == null && infoEditViewModel.UploadFile != null) //не было - добавили
@@ -183,7 +182,7 @@ namespace SAKnowledgeBase.Controllers
                             //закачать новый файл и добавить значение в переменную
                             infoToEdit.PhotoPath = UploadFile(infoEditViewModel.UploadFile);
                         }
-                        else if(infoToEdit.PhotoPath != null && infoEditViewModel.UploadFile == null) // был - теперь нету
+                        else if (infoToEdit.PhotoPath != null && infoEditViewModel.UploadFile == null) // был - теперь нету
                         {
                             //удалить старый файл
                             string exitingFile = Path.Combine(_environment.WebRootPath, "img", infoToEdit.PhotoPath);
@@ -191,7 +190,7 @@ namespace SAKnowledgeBase.Controllers
                             //изменить значение переменно на нуль
                             infoToEdit.PhotoPath = null;
                         }
-                        else if(infoToEdit.PhotoPath != null && infoEditViewModel.UploadFile != null) // был один - стал другой
+                        else if (infoToEdit.PhotoPath != null && infoEditViewModel.UploadFile != null) // был один - стал другой
                         {
                             // удалить старый файл
                             string exitingFile = Path.Combine(_environment.WebRootPath, "img", infoToEdit.PhotoPath);
@@ -199,17 +198,6 @@ namespace SAKnowledgeBase.Controllers
                             //закачать новый файл и добавить значение в переменную
                             infoToEdit.PhotoPath = UploadFile(infoEditViewModel.UploadFile);
                         }
-
-
-                        //if (infoEditViewModel.UploadFile != null)
-                        //{
-                        //    if (infoToEdit.PhotoPath != null)
-                        //    {
-                        //        string exitingFile = Path.Combine(_environment.WebRootPath, "img", infoToEdit.PhotoPath);
-                        //        System.IO.File.Delete(exitingFile);
-                        //    }
-                        //    infoToEdit.PhotoPath = UploadFile(infoEditViewModel.UploadFile);
-                        //}
 
                         await _infoRepo.UpdateAsync(infoToEdit);
 

@@ -1,9 +1,9 @@
-﻿@using SAKnowledgeBase.DataBase.Entities;
+﻿
 @using SAKnowledgeBase.Models.ViewModel
 
 @model InfoEditViewModel
 
-<form asp-action="Edit" asp-controller="Info" method="post">
+<form enctype="multipart/form-data" asp-action="Edit" asp-controller="Info" method="post">
     <input type="hidden" asp-for="Id" />
     <div class="row">
         <div class="col-lg-12">
@@ -43,6 +43,11 @@
                     {
                         string imagePath = "~/img/" + @Model.PhotoPath;
                         <img src="@imagePath" class="img-thumbnail" height="100" width="100" asp-append-version="true" />
+                        <br/>
+                        <label>To delete photo file, delete file name:</label>
+                        <input asp-for="@Model.PhotoPath" class="form-control required" type="text" placeholder="no photo" tabindex="1">
+                        <span asp-validation-for="@Model.PhotoPath" class="text-danger"></span>
+
                     }
                     else
                     {
