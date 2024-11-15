@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using SAKnowledgeBase.DataBase.Entities;
 using SAKnowledgeBase.Models.ViewModel;
 using SAKnowledgeBase.Repositories.Interfaces;
@@ -20,30 +21,40 @@ namespace SAKnowledgeBase.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchFor)
         {
             var mainInfos = new MainInfoModel();
             mainInfos.Themes = await _themeRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
-
-            //mainInfos.Questions = await _questionRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
-            //mainInfos.Questions = await _questionRepo.Items
-            //.OrderBy(x => x.SequenceNum)
-            //.OrderBy(x => x.Theme.SequenceNum)
-            //.ToListAsync();
-
             mainInfos.Questions = new List<Question>();
-            foreach (var theme in mainInfos.Themes) 
+            mainInfos.Infos = new List<Info>();
+
+            if (searchFor == null)
             {
-                List<Question> themeQuestions = new List<Question>();
-                foreach (var question in theme.Questions) 
+                foreach (var theme in mainInfos.Themes)
                 {
-                    themeQuestions.Add(question);
+                    List<Question> themeQuestions = new List<Question>();
+                    foreach (var question in theme.Questions)
+                    {
+                        themeQuestions.Add(question);
+                    }
+                    themeQuestions.OrderBy(x => x.SequenceNum).ToList();
+                    mainInfos.Questions.AddRange(themeQuestions);
                 }
-                themeQuestions.OrderBy(x => x.SequenceNum).ToList();
-                mainInfos.Questions.AddRange(themeQuestions);
+            }
+            else
+            {
+                List<Question> searhQuestions = new List<Question>();
+
+                IQueryable<Info> infos = _infoRepo.Items.Where(x => x.Text.ToLower().Contains(searchFor.ToLower())).Distinct();
+                foreach (var info in infos)
+                {
+                    if(!searhQuestions.Contains(info.Question)) searhQuestions.Add(info.Question);
+                }
+                searhQuestions.OrderBy(x => x.SequenceNum).ToList();
+                
+                mainInfos.Questions.AddRange(searhQuestions);
             }
 
-            mainInfos.Infos = new List<Info>();
             foreach (var question in mainInfos.Questions)
             {
                 List<Info> questionInfos = new List<Info>();
@@ -55,13 +66,6 @@ namespace SAKnowledgeBase.Controllers
                 mainInfos.Infos.AddRange(questionInfos);
             }
 
-
-            //mainInfos.Infos = await _infoRepo.Items.OrderBy(x => x.SequenceNum).ToListAsync();
-            //mainInfos.Infos = await _infoRepo.Items
-            //    .OrderBy(x => x.SequenceNum)
-            //    .OrderBy(x => x.Question.SequenceNum)
-            //    .OrderBy(x => x.Question.Theme.SequenceNum)
-            //    .ToListAsync();
 
             return View(mainInfos);
         }
@@ -77,20 +81,6 @@ namespace SAKnowledgeBase.Controllers
             if (theme != null) {  
                 mainInfos.Questions = theme.Questions.OrderBy(x => x.SequenceNum).ToList();
             }
-            //else
-            //{
-            //    mainInfos.Questions = new List<Question>();
-            //    foreach (var th in mainInfos.Themes)
-            //    {
-            //        List<Question> themeQuestions = new List<Question>();
-            //        foreach (var question in th.Questions)
-            //        {
-            //            themeQuestions.Add(question);
-            //        }
-            //        themeQuestions.OrderBy(x => x.SequenceNum).ToList();
-            //        mainInfos.Questions.AddRange(themeQuestions);
-            //    }
-            //}
 
             mainInfos.Infos = new List<Info>();
             foreach (var question in mainInfos.Questions)

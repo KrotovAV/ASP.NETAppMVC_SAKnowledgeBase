@@ -12,6 +12,7 @@ namespace SAKnowledgeBase.DataBase
         public DbSet<Info> Infos { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Theme> Themes { get; set; }
+        public DbSet<User> Users { get; set; }
 
         //    dotnet ef migrations add InitialMigration 
         //    dotnet ef database update
@@ -35,6 +36,12 @@ namespace SAKnowledgeBase.DataBase
             modelBuilder.Entity<Info>().HasOne(u => u.Question).WithMany(c => c.Infos).HasForeignKey(u => u.QuestionId);
             modelBuilder.Entity<Info>().HasOne(u => u.TextFormat).WithMany(c => c.Infos).HasForeignKey(u => u.FormatId);
             modelBuilder.Entity<Question>().HasOne(u => u.Theme).WithMany(c => c.Questions).HasForeignKey(u => u.ThemeId);
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasIndex(e => e.Name).IsUnique();
+                entity.Property(e => e.Name).HasMaxLength(100);
+            });
 
             //modelBuilder.Entity<Theme>().HasData(
             //    new Theme[]{
@@ -130,6 +137,7 @@ namespace SAKnowledgeBase.DataBase
 
             //    }
             //);
+
         }
 
     }
