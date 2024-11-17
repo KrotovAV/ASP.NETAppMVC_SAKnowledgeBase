@@ -61,80 +61,6 @@ namespace SAKnowledgeBase.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("Infos");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FormatId = 2,
-                            Level = 1,
-                            QuestionId = 1,
-                            SequenceNum = 1,
-                            Text = "Виды требований "
-                        },
-                        new
-                        {
-                            Id = 2,
-                            FormatId = 4,
-                            Level = 1,
-                            QuestionId = 1,
-                            SequenceNum = 2,
-                            Text = "По Вигерсу выделяют три уровня требований:"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            FormatId = 4,
-                            Level = 1,
-                            QuestionId = 1,
-                            SequenceNum = 3,
-                            Text = "1. Бизнес-требования "
-                        },
-                        new
-                        {
-                            Id = 4,
-                            FormatId = 4,
-                            Level = 1,
-                            QuestionId = 1,
-                            SequenceNum = 4,
-                            Text = "(описывают высокоуровневые цели организации или заказчиков системы. Например, после внедрения СДБО планируется рост выручки на 20%, уменьшение операционных расходов банка на 10%) "
-                        },
-                        new
-                        {
-                            Id = 5,
-                            FormatId = 4,
-                            Level = 1,
-                            QuestionId = 1,
-                            SequenceNum = 5,
-                            Text = "2. Требования пользователей "
-                        },
-                        new
-                        {
-                            Id = 6,
-                            FormatId = 4,
-                            Level = 1,
-                            QuestionId = 1,
-                            SequenceNum = 6,
-                            Text = "(описывают цели и задачи пользователя, которые позволит решить система. Use cases и User Stories описываются на этом уровне. Например, возможность осуществления банковских операций удаленно) "
-                        },
-                        new
-                        {
-                            Id = 7,
-                            FormatId = 4,
-                            Level = 1,
-                            QuestionId = 1,
-                            SequenceNum = 7,
-                            Text = "3. Функциональные требования "
-                        },
-                        new
-                        {
-                            Id = 8,
-                            FormatId = 4,
-                            Level = 1,
-                            QuestionId = 1,
-                            SequenceNum = 8,
-                            Text = "(описывают функциональность ПО, которую разработчики должны построить, чтобы пользователи смогли выполнить свои задачи в рамках бизнес-требований, описываются в спецификации требований к ПО (SRS). Например, открытие вклада, осуществление автоплатежей.)"
-                        });
                 });
 
             modelBuilder.Entity("SAKnowledgeBase.DataBase.Entities.Question", b =>
@@ -160,50 +86,6 @@ namespace SAKnowledgeBase.Migrations
                     b.HasIndex("ThemeId");
 
                     b.ToTable("Questions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            QuestionName = "Виды требований",
-                            SequenceNum = 0,
-                            ThemeId = 2
-                        },
-                        new
-                        {
-                            Id = 2,
-                            QuestionName = "Эстимация",
-                            SequenceNum = 0,
-                            ThemeId = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            QuestionName = "Управление требованиями",
-                            SequenceNum = 0,
-                            ThemeId = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            QuestionName = "V&S",
-                            SequenceNum = 0,
-                            ThemeId = 3
-                        },
-                        new
-                        {
-                            Id = 5,
-                            QuestionName = "SRS",
-                            SequenceNum = 0,
-                            ThemeId = 3
-                        },
-                        new
-                        {
-                            Id = 6,
-                            QuestionName = "ТЗ, ЧТЗ",
-                            SequenceNum = 0,
-                            ThemeId = 3
-                        });
                 });
 
             modelBuilder.Entity("SAKnowledgeBase.DataBase.Entities.TextFormat", b =>
@@ -237,7 +119,7 @@ namespace SAKnowledgeBase.Migrations
                             Id = 1,
                             Bold = true,
                             FormatName = "Раздел",
-                            TextSize = 9,
+                            TextSize = 7,
                             Tilt = false
                         },
                         new
@@ -245,7 +127,7 @@ namespace SAKnowledgeBase.Migrations
                             Id = 2,
                             Bold = true,
                             FormatName = "Вопрос",
-                            TextSize = 8,
+                            TextSize = 6,
                             Tilt = false
                         },
                         new
@@ -253,7 +135,7 @@ namespace SAKnowledgeBase.Migrations
                             Id = 3,
                             Bold = true,
                             FormatName = "Подраздел",
-                            TextSize = 7,
+                            TextSize = 5,
                             Tilt = false
                         },
                         new
@@ -261,7 +143,7 @@ namespace SAKnowledgeBase.Migrations
                             Id = 4,
                             Bold = false,
                             FormatName = "Текст",
-                            TextSize = 6,
+                            TextSize = 4,
                             Tilt = false
                         },
                         new
@@ -269,7 +151,7 @@ namespace SAKnowledgeBase.Migrations
                             Id = 5,
                             Bold = true,
                             FormatName = "Текст жирный",
-                            TextSize = 6,
+                            TextSize = 4,
                             Tilt = false
                         },
                         new
@@ -277,7 +159,7 @@ namespace SAKnowledgeBase.Migrations
                             Id = 6,
                             Bold = false,
                             FormatName = "Перечисления",
-                            TextSize = 6,
+                            TextSize = 4,
                             Tilt = false
                         },
                         new
@@ -285,7 +167,7 @@ namespace SAKnowledgeBase.Migrations
                             Id = 7,
                             Bold = false,
                             FormatName = "Пояснение",
-                            TextSize = 5,
+                            TextSize = 3,
                             Tilt = true
                         });
                 });
@@ -308,73 +190,47 @@ namespace SAKnowledgeBase.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Themes");
+                });
+
+            modelBuilder.Entity("SAKnowledgeBase.DataBase.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<byte[]>("Password")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("Salt")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            SequenceNum = 1,
-                            ThemeName = "BA/SA Agile"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            SequenceNum = 2,
-                            ThemeName = "Требования"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            SequenceNum = 3,
-                            ThemeName = "Документация"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            SequenceNum = 4,
-                            ThemeName = "Фазы проекта"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            SequenceNum = 5,
-                            ThemeName = "Прототипирование"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            SequenceNum = 6,
-                            ThemeName = "Моделирование"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            SequenceNum = 8,
-                            ThemeName = "Базы Данных"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            SequenceNum = 9,
-                            ThemeName = "Интеграции"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            SequenceNum = 10,
-                            ThemeName = "Тестирование"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            SequenceNum = 11,
-                            ThemeName = "SQL"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            SequenceNum = 7,
-                            ThemeName = "Web сервисы / API"
+                            Name = "admin@ad.min",
+                            Password = new byte[] { 90, 134, 225, 217, 40, 237, 44, 134, 95, 104, 34, 83, 248, 217, 204, 173, 235, 111, 189, 196, 96, 130, 24, 13, 214, 172, 39, 103, 141, 240, 177, 244, 41, 252, 47, 217, 75, 241, 148, 60, 38, 241, 245, 167, 71, 234, 107, 191, 237, 61, 38, 67, 238, 44, 67, 109, 68, 232, 34, 163, 134, 88, 159, 125 },
+                            Role = 0,
+                            Salt = new byte[] { 37, 6, 204, 204, 32, 31, 160, 71, 178, 188, 87, 118, 38, 90, 251, 5 }
                         });
                 });
 

@@ -1,36 +1,49 @@
-﻿@* @model CreateUserViewModel
-@{
-    ViewBag.Title = "Create New User";
-}
-<form asp-controller="UserManagment" asp-action="CreateUser" method="post" class="mt-5 offset-3 col-6 border border-primary pt-2 pb-2 px-2 py-2">
-    <div>
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
+﻿@using SAKnowledgeBase.Models.ViewModel
+
+@model UserCreateViewModel
+
+<form enctype="multipart/form-data" asp-action="Create" asp-controller="AdminManagment" method="post">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="form-group">
+                <label>Email:</label>
+                <input asp-for="@Model.Name" type="text" class="form-control required" placeholder="Enter email" tabindex="1">
+                <span asp-validation-for="@Model.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input asp-for="@Model.Password" type="text" class="form-control required" placeholder="Enter Password" tabindex="1">
+                <span asp-validation-for="@Model.Password" class="text-danger"></span>
+            </div>
+           
+            <div class="form-group">
+                <label>Role:</label> <br />
+                @foreach (var type in ViewBag.RoleTypesRadio)
+                {
+                    <input type="radio" asp-for="Role" value="@((int)type)" checked="@(type == ViewBag.RoleTypesRadio[1])" />
+                    @* <input type="radio" asp-for="Role" value="@((int)type)" checked="@(type == Model?.Role)" /> *@
+                    <label asp-for="Role">@type</label>
+                    <br />
+                }
+            </div>
+            @* <br /> *@
+
+
+            <div class="form-group">
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+            <div class="card-footer">
+                <center>
+                    <button type="submit" class="btn btn-primary">
+                        Create User
+                    </button>
+                    <a asp-action="Index" asp-controller="AdminManagment" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                </center>
+            </div>
+        </div>
     </div>
-    <div>
-        <label asp-for="Password" class="form-label"></label>
-        <input asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <div>
-        <label asp-for="ConfirmPassword" class="form-label"></label>
-        <input asp-for="ConfirmPassword" class="form-control" />
-        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-    </div>
-    <div><button type="submit" class="btn btn-primary mt-2">Save</button></div>
-    <div asp-validation-summary="All" class="text-danger"></div>
 </form>
-@if (ViewBag.RegisteredResult == "Yes")
-{
-    <div class="alert alert-success mt-2 offset-3 col-6" role="alert">
-        Your account was successfully registered
-    </div>
-}
-@if (ViewBag.RegisteredResult == "No")
-{
-    <div class="alert alert-danger mt-2 offset-3 col-6" role="alert">
-        Internal Error: The user has not been created!
-    </div>
-}
- *@
+
+

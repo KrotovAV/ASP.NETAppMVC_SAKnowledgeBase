@@ -1,31 +1,17 @@
 ﻿@using SAKnowledgeBase.DataBase.Entities;
 
-@model List<Theme>
+@model List<User>
 
 
 <div class="row">
-    <div class="col-md-1 mt-2">
-        <h5>Theme</h5>
+    <div class="col-md-2 mt-2">
+        <h5>AdminManagment</h5>
     </div>
     <div class="col-md-7">
-        <a asp-action="Create" asp-controller="Theme" class="btn btn-success">
-            Create
+        <a asp-action="Create" asp-controller="AdminManagment" class="btn btn-success">
+            Create new user
         </a>
     </div>
-    <div class="col-md-2">
-        <a asp-action="UploadThemeExcel" asp-controller="File" class="btn btn-success">
-            Upload Excel File
-        </a>
-    </div>
-
-    <div class="col-md-2">
-        <form asp-action="ExportThemeExcel" asp-controller="File" method="post">
-            <button type="submit" class="btn btn-success">
-                Generate Excel File
-            </button>
-        </form>
-    </div>
-
 
     <div class="col-md-12">
         <table class="table">
@@ -33,10 +19,8 @@
                 <tr>
                     <td>Manage</td>
                     <td>Id</td>
-                    <td>Theme Name</td>
-                    <td>Sequence Num </td>
-                    <td>Contains Questions</td>
-                    <td>Info</td>
+                    <td>Email</td>
+                    <td>Role</td>
                 </tr>
             </thead>
             <tbody>
@@ -44,22 +28,16 @@
                 {
                     <tr>
                         <td>
-                            <a asp-action="Edit" asp-controller="Theme" class="btn btn-warning mt-1" asp-route-id="@item.Id">
+                            <a asp-action="Edit" asp-controller="AdminManagment" class="btn btn-warning mt-1" asp-route-id="@item.Id">
                                 Edit
                             </a>
-                            <a asp-action="Delete" asp-controller="Theme" class="btn btn-danger mt-1" asp-route-id="@item.Id">
+                            <a asp-action="Delete" asp-controller="AdminManagment" class="btn btn-danger mt-1" asp-route-id="@item.Id">
                                 Delete
                             </a>
                         </td>
                         <td>@item.Id</td>
-                        <td>@item.ThemeName</td>
-                        <td>@item.SequenceNum</td>
-                        <td>@item.Questions.Count</td>
-                        <td>
-                            <a asp-action="Details" asp-controller="Theme" class="btn btn-primary" asp-route-id="@item.Id">
-                                View
-                            </a>
-                        </td>
+                        <td>@item.Name</td>
+                        <td>@item.Role</td>
                     </tr>
                 }
             </tbody>

@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.SqlServer.Server;
 using SAKnowledgeBase.DataBase.Entities;
+using SAKnowledgeBase.Models.ViewModel;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using static System.Collections.Specialized.BitVector32;
 
 namespace SAKnowledgeBase.DataBase
@@ -138,7 +141,19 @@ namespace SAKnowledgeBase.DataBase
             //    }
             //);
 
-        }
+            string mail = "admin@ad.min";
+            string pass = "admin";
 
+            var salt = new byte[16];
+            new Random().NextBytes(salt);
+            var data = Encoding.ASCII.GetBytes(pass).Concat(salt).ToArray();
+            SHA512 shaM = new SHA512Managed();
+
+            modelBuilder.Entity<User>().HasData(
+               new User[]{
+                    new User { Id=1, Name= mail, Role = Role.Admin, Password = shaM.ComputeHash(data), Salt = salt }
+               }
+           );
+        }
     }
 }

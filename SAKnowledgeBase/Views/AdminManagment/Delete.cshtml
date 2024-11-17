@@ -1,5 +1,35 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using SAKnowledgeBase.DataBase.Entities;
+
+@model User
+
+<form asp-action="DeleteConfirmed" asp-controller="AdminManagment" method="post" asp-append-version="true">
+    <input type="hidden" asp-for="Id" />
+    <div class="row">
+        <div class="col-lg-4 offset-lg-4 col-md-6 offset-md-3 col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="alert alert-danger">
+                        <h3>Are you sure you want to delete this?</h3>
+                    </div>
+                    User ID @Model.Id
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Name: @Model.Name</p>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Role: @Model.Role</p>
+                </div>
+                <div class="card-footer">
+                    <center>
+                        <button type="submit" class="btn btn-danger">
+                            Delete user
+                        </button>
+                        <a asp-action="Index" asp-controller="AdminManagment" class="btn btn-secondary">
+                            Cancel
+                        </a>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

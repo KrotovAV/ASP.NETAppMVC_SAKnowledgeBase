@@ -80,7 +80,8 @@ namespace SAKnowledgeBase.Controllers
                                 theme.ThemeName = reader.GetValue(1).ToString();
                                 theme.SequenceNum = Convert.ToInt32(reader.GetValue(2).ToString());
 
-                                await _themeRepo.AddAsync(theme);
+                                //await _themeRepo.AddAsync(theme);
+                                _themeRepo.Add(theme);
 
                             }
                         } while (reader.NextResult());
@@ -140,7 +141,8 @@ namespace SAKnowledgeBase.Controllers
                                 question.SequenceNum = Convert.ToInt32(reader.GetValue(2).ToString());
                                 question.ThemeId = Convert.ToInt32(reader.GetValue(3).ToString());
 
-                                await _questionRepo.AddAsync(question);
+                                //await _questionRepo.AddAsync(question);
+                                _questionRepo.Add(question);
 
                             }
                         } while (reader.NextResult());
@@ -217,7 +219,8 @@ namespace SAKnowledgeBase.Controllers
                                 }
                                 else info.Link = null;
 
-                                await _infoRepo.AddAsync(info);
+                                //await _infoRepo.AddAsync(info);
+                                 _infoRepo.Add(info);
 
                             }
                         } while (reader.NextResult());
