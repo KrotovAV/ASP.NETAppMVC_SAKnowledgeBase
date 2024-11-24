@@ -20,16 +20,23 @@
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                 <div class="container-fluid">
                     <div col-md-4 float-end mt-1">
-       
                         <h4>
                             SA/BA Knowledge Base
                         </h4>
-                        
                     </div>
+                </div>
+                //@controller
                     <div col-md-4>
                         @if ((User.IsInRole("Manager")) || (User.IsInRole("Admin")))
                         {
-                            <a class="navbar-brand" asp-controller="Main" asp-action="Index">Main</a>
+                            @if (!controller.Contains("/Main"))
+                            {
+                                <li class="nav-item">
+                                    <a class="navbar-brand" asp-controller="Main" asp-action="Index">Main</a>
+                               
+                                </li>
+                            }
+                            //<a class="navbar-brand" asp-controller="Main" asp-action="Index">Main</a>
                             <a class="navbar-brand" asp-controller="Theme" asp-action="Index">Theme</a>
                             <a class="navbar-brand" asp-controller="Question" asp-action="Index">Question</a>
                             <a class="navbar-brand" asp-controller="Info" asp-action="Index">Info</a>
