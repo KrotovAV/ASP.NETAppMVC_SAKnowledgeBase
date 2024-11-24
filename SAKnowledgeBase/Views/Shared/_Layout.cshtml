@@ -29,10 +29,10 @@
                     <div col-md-4>
                         @if ((User.IsInRole("Manager")) || (User.IsInRole("Admin")))
                         {
-                            <a class="navbar-brand" asp-area="" asp-controller="Main" asp-action="Index">Main</a>
-                            <a class="navbar-brand" asp-area="" asp-controller="Theme" asp-action="Index">Theme</a>
-                            <a class="navbar-brand" asp-area="" asp-controller="Question" asp-action="Index">Question</a>
-                            <a class="navbar-brand" asp-area="" asp-controller="Info" asp-action="Index">Info</a>
+                            <a class="navbar-brand" asp-controller="Main" asp-action="Index">Main</a>
+                            <a class="navbar-brand" asp-controller="Theme" asp-action="Index">Theme</a>
+                            <a class="navbar-brand" asp-controller="Question" asp-action="Index">Question</a>
+                            <a class="navbar-brand" asp-controller="Info" asp-action="Index">Info</a>
                             @if (User.IsInRole("Admin"))
                             {
                             <a class="navbar-brand" asp-area="" asp-controller="AdminManagment" asp-action="Index">Users</a>
@@ -69,21 +69,22 @@
                                 }
                                 else
                                 {
-                                @if (!controller.Equals("/Main"))
+                                    @if (!controller.Equals("/Main"))
                                     {
                                         <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-area="" asp-controller="Main" asp-action="Index">Main</a>
+                                            <a class="nav-link text-dark" asp-controller="Main" asp-action="Index">Main</a>
                                         </li>
                                     }
-                                    @if (!controller.Equals("/Signin")) // убрать после deploy
+                                // убрать после deploy
+                                    @if (!controller.Equals("/Signin"))
                                     {
                                         <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-area="" asp-controller="Signin" asp-action="Index">Signin</a>
+                                            <a class="nav-link text-dark" asp-controller="Signin" asp-action="Index">Signin</a>
                                         </li>
                                     }
                                 }
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                    <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
                                 </li>
                             </ul>
                         </div>
