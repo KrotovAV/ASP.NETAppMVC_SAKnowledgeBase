@@ -1,0 +1,25 @@
+﻿@using SAKnowledgeBase.Models.ViewModel
+
+@model SignInViewModel
+
+<form asp-controller="Signin" asp-action="Check" method="post" class="mt-5 offset-3 col-6 border border-primary pt-2 pb-2 px-2 py-2">
+    <div class="alert alert-danger">
+        <h5>Enter correct data!</h5>
+    </div>
+    <div>
+        <label asp-for="UserName" class="form-label">Email</label>
+        <input asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div>
+        <label asp-for="Password" class="form-label"></label>
+        <input asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="form-check">
+        @*  <input asp-for="RememberMe" class="form-check-input" type="checkbox" id="rememberMe">
+        <label asp-for="RememberMe" class="form-check-label" for="rememberMe"></label> *@
+    </div>
+    <div><button type="submit" class="btn btn-primary mt-2">Sign In</button></div>
+    <div asp-validation-summary="All" class="text-danger"></div>
+</form>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using SAKnowledgeBase.DataBase.Entities;
@@ -7,6 +8,7 @@ using SAKnowledgeBase.Repositories.Interfaces;
 
 namespace SAKnowledgeBase.Controllers
 {
+    [AllowAnonymous]
     public class MainController : Controller
     {
         private IRepository<Theme> _themeRepo;

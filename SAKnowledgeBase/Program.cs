@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.Extensions.FileProviders;
@@ -32,7 +33,6 @@ namespace SAKnowledgeBase
             builder.Services.AddTransient<IRepository<User>, UserRepository>();
             builder.Configuration.GetConnectionString("Connection");
 
-            builder.Services.AddAuthorization();
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -53,24 +53,18 @@ namespace SAKnowledgeBase
                         // валидация ключа безопасности
                         ValidateIssuerSigningKey = true,
                     };
+                    //настраиваем что б токен брался из куки
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            context.Token = context.Request.Cookies["tasty-cookies"];
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
 
-            //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
-            //{
-            //    opt.TokenValidationParameters = new TokenValidationParameters
-            //    {
-            //        ValidateIssuer = true,
-            //        ValidateAudience = true,
-            //        ValidateLifetime = true,
-            //        ValidateIssuerSigningKey = true,
-            //        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            //        ValidAudience = builder.Configuration["Jwt:Audience"],
-            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-            //    };
-            //});
-
-
-
+            builder.Services.AddAuthorization();
 
             builder.Services.AddSingleton<IFileProvider>(
                 new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"))
@@ -91,50 +85,16 @@ namespace SAKnowledgeBase
 
             app.UseRouting();
 
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Strict,
+                HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,
+                Secure = CookieSecurePolicy.Always
+            });
+
+
             app.UseAuthentication();
             app.UseAuthorization();
-
-            //app.Map("/login/{username}", (string username) =>
-            //{
-            //    var claims = new List<Claim> { new Claim(ClaimTypes.Name, username) };
-            //    var jwt = new JwtSecurityToken(
-            //            issuer: AuthOptions.ISSUER,
-            //            audience: AuthOptions.AUDIENCE,
-            //            claims: claims,
-            //            expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(60)), // время действия 60 минуты
-            //            signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-
-            //    return new JwtSecurityTokenHandler().WriteToken(jwt);
-            //});
-
-            //app.Map("/login", (SignInViewModel signInViewModel) =>
-            //{
-            //    // находим пользователя 
-            //    //Person? person = people.FirstOrDefault(p => p.Email == loginData.Email && p.Password == loginData.Password);
-            //    // если пользователь не найден, отправляем статусный код 401
-            //    //if (person is null) return Results.Unauthorized();
-
-            //    var claims = new List<Claim> { new Claim(ClaimTypes.Name, person.Email) };
-            //    // создаем JWT-токен
-            //    var jwt = new JwtSecurityToken(
-            //            issuer: AuthOptions.ISSUER,
-            //            audience: AuthOptions.AUDIENCE,
-            //            claims: claims,
-            //            expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
-            //            signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-            //    var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-            //    // формируем ответ
-            //    var response = new
-            //    {
-            //        access_token = encodedJwt,
-            //        username = person.Email
-            //    };
-
-            //    return Results.Json(response);
-            //});
-
-
 
             app.MapControllerRoute(
                 name: "default",

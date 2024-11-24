@@ -10,8 +10,7 @@ using System.Text;
 
 namespace SAKnowledgeBase.Controllers
 {
-
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AdminManagmentController : Controller
     {
         private IRepository<User> _userRepo;
@@ -20,14 +19,12 @@ namespace SAKnowledgeBase.Controllers
             _userRepo = userRepo;
         }
 
-        //[Authorize]
         public async Task<IActionResult> Index()
         {
             var users = await _userRepo.Items.ToListAsync();
             return View(users);
         }
 
-        //[Authorize]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -37,7 +34,6 @@ namespace SAKnowledgeBase.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(UserCreateViewModel userCreateViewModel)
         {
             if (ModelState.IsValid)
@@ -83,6 +79,7 @@ namespace SAKnowledgeBase.Controllers
             await LoadDropdownList();
             return View(userEditViewModel);
         }
+        
         [HttpPost]
         public async Task<IActionResult> Edit(UserEditViewModel userEditViewModel)
         {

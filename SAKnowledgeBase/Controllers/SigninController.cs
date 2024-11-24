@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using SAKnowledgeBase.Authentication;
 using SAKnowledgeBase.DataBase.Entities;
@@ -23,9 +27,10 @@ namespace SAKnowledgeBase.Controllers
         {
             _userRepo = userRepo;
             _config = config;
+            
         }
 
-        public IActionResult Mistake()
+        public IActionResult IndexMistake()
         {
             return View();
         }
@@ -35,81 +40,68 @@ namespace SAKnowledgeBase.Controllers
             return View();
         }
 
-        [HttpGet]
-        public IActionResult Check()
-        {
-            return View();
-        }
-
-        //[AllowAnonymous]
         [HttpPost]
         public IActionResult Check(SignInViewModel signInViewModel)
         {
         
             var user = _userRepo.Items.FirstOrDefault(x => x.Name == signInViewModel.UserName);
-
+            if (user == null)
+            {
+                return RedirectToAction("IndexMistake", "Signin");
+            }
             var data = Encoding.ASCII.GetBytes(signInViewModel.Password).Concat(user.Salt).ToArray();
             SHA512 shaM = new SHA512Managed();
             var password = shaM.ComputeHash(data);
 
-            //bool pas = user.Password.SequenceEqual(password);
-
             if (user.Password.SequenceEqual(password))
             {
-                //var token = GenerateToken(user);
-
-                //if (user is null) return Results.Unauthorized();
+                // создаем список с клаймами
                 List<Claim> claims = new List<Claim> {
                     new Claim(ClaimTypes.Name, user.Name),
                     new Claim(ClaimTypes.Role, user.Role.ToString())
                     };
+
                 // создаем JWT-токен
-                JwtSecurityToken jwt = new JwtSecurityToken(
+                JwtSecurityToken jwtToken= new JwtSecurityToken(
                         issuer: AuthOptions.ISSUER,
                         audience: AuthOptions.AUDIENCE,
                         claims: claims,
-                        expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
+                        expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(240)), // время жизни токена 4 часа
                         signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-                var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+                var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwtToken);
 
-                // формируем ответ
-                var response = new
-                {
-                    access_token = encodedJwt,
-                    username = user.Name,
-                    userrole = user.Role.ToString()
-                };
+                // добавляем токен в куки
+                var context = ControllerContext.HttpContext;
 
-                //return Results.Json(response);
+                context.Response.Cookies.Append("tasty-cookies", encodedJwt);
+                //context.Response.Cookies.Append("r-o", user.Name);
+                //context.Response.Cookies.Append("n-a", user.Role.ToString());
 
             }
             else
             {
-                return RedirectToAction("Mistake");
+                //return RedirectToAction("Index", "Main");
+                return RedirectToAction("IndexMistake", "Signin");
             }
 
-
-
-            return RedirectToAction("Index", "Main");
-            //return View();
+            return RedirectToAction("Index", "Info");
         }
 
+        public async Task<IActionResult> Logout()
+        {
+            var context = ControllerContext.HttpContext;
 
-        //private string GenerateToken(User user)
-        //{
-        //    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
-        //    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-        //    var claims = new[] {
-        //    new Claim(ClaimTypes.NameIdentifier, user.Name),
-        //    new Claim(ClaimTypes.Role, user.Role.ToString())};
+            //context.Cookies.Delete["tasty-cookies"];
 
-        //    var token = new JwtSecurityToken(_config["Jwt:Issuer"],
-        //        _config["Jwt:Audience"],
-        //        claims,
-        //        expires: DateTime.Now.AddMinutes(60),
-        //        signingCredentials: credentials);
+           // Request.Cookies
+            //await HttpContext.SignOutAsync();
+            if (context.Request.Cookies.ContainsKey("tasty-cookies"))
+            {
+                context.Response.Cookies.Delete("tasty-cookies");
+            }
 
-        //    return new JwtSecurityTokenHandler().WriteToken(token);
-        //}
+            return RedirectToAction("Index", "Main");
+        }
+
     }
 }

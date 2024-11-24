@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SAKnowledgeBase.DataBase.Entities;
@@ -7,6 +8,7 @@ using SAKnowledgeBase.Repositories.Interfaces;
 
 namespace SAKnowledgeBase.Controllers
 {
+    [Authorize(Roles = "Admin, Manager")]
     public class InfoController : Controller
     {
         private IRepository<Info> _infoRepo;
