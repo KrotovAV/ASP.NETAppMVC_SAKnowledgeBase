@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿﻿@using Microsoft.AspNetCore.Identity
 @{
     string userName = User.Identity.Name;
     string controller = Context.Request.Path.ToString();
@@ -7,115 +7,155 @@
 <!DOCTYPE html>
 
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>@ViewData["Title"] - SAKnowledgeBase</title>
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-        <link rel="stylesheet" href="~/SAKnowledgeBase.styles.css" asp-append-version="true" />
-    </head>
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-                <div class="container-fluid">
-                    <div col-md-4 float-end mt-1">
-                        <h4>
-                            SA/BA Knowledge Base
-                        </h4>
-                    </div>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SAKnowledgeBase</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SAKnowledgeBase.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <div col-md-1 mt-1">
+                    @* <div col-md-1 float-end mt-1"> *@
+                    <h4>
+                        SA/BA Knowledge Base
+                    </h4>
                 </div>
-                //@controller
-                    <div col-md-4>
-                        @if ((User.IsInRole("Manager")) || (User.IsInRole("Admin")))
+           
+                <div col-md-5>
+                    @if ((User.IsInRole("Manager")) || (User.IsInRole("Admin")))
+                    {
+                        @if (controller.Contains("/Theme"))
                         {
-                            @if (!controller.Contains("/Main"))
-                            {
-                                <li class="nav-item">
-                                    <a class="navbar-brand" asp-controller="Main" asp-action="Index">Main</a>
-                               
-                                </li>
-                            }
-                            //<a class="navbar-brand" asp-controller="Main" asp-action="Index">Main</a>
-                            <a class="navbar-brand" asp-controller="Theme" asp-action="Index">Theme</a>
-                            <a class="navbar-brand" asp-controller="Question" asp-action="Index">Question</a>
-                            <a class="navbar-brand" asp-controller="Info" asp-action="Index">Info</a>
-                            @if (User.IsInRole("Admin"))
-                            {
-                            <a class="navbar-brand" asp-area="" asp-controller="AdminManagment" asp-action="Index">Users</a>
+                            <a class="navbar-brand fw-bold" asp-controller="Theme" asp-action="Index">Theme</a>
                         }
+                        else
+                        {
+                            <a class="navbar-brand" asp-controller="Theme" asp-action="Index">Theme</a>
+                        }
+                        @if (controller.Contains("/Question"))
+                        {
+                            <a class="navbar-brand fw-bold" asp-controller="Question" asp-action="Index">Question</a>
+                        }
+                        else
+                        {
+                            <a class="navbar-brand" asp-controller="Question" asp-action="Index">Question</a>
+                        }
+                        @if (controller.Contains("/Info"))
+                        {
+                            <a class="navbar-brand fw-bold" asp-controller="Info" asp-action="Index">Info</a>
+                        }
+                        else
+                        {
+                            <a class="navbar-brand" asp-controller="Info" asp-action="Index">Info</a>
+                        }
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            @if (controller.Contains("/AdminManagment"))
+                            {
+                                <a class="navbar-brand fw-bold" asp-area="" asp-controller="AdminManagment" asp-action="Index">Users</a>
+                            }
+                            else
+                            {
+                                <a class="navbar-brand" asp-area="" asp-controller="AdminManagment" asp-action="Index">Users</a>
+                            }
+                           
+                        }
+                        @* @if (!controller.Contains("/Theme"))
+                        {
+                            <a class="navbar-brand" asp-controller="Theme" asp-action="Index">Theme</a>
+                        }
+                        @if (!controller.Contains("/Question"))
+                        {
+                            <a class="navbar-brand" asp-controller="Question" asp-action="Index">Question</a>
+                        }
+                        @if (!controller.Contains("/Info"))
+                        {
+                            <a class="navbar-brand" asp-controller="Info" asp-action="Index">Info</a>
+                        }
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a class="navbar-brand" asp-area="" asp-controller="AdminManagment" asp-action="Index">Users</a>
+                        } *@
                     }
                     else
                     {
-                       @*  <h3>
-                            Реклама 1
-                        </h3> *@
+                        @*  <h3>
+                    Реклама 1
+                    </h3> *@
                     }
                 </div>
-                    
-                    @*            
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button> 
-                    *@
 
-                    <div col-md-4>
-                        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                            <ul class="navbar-nav flex-grow-1">
-                                @if (@userName != null)
-                                {
-                                    <li class="nav-item px-2 mt-2 text-black-50">
-                                        <h7>@userName</h7>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a asp-action="Logout" asp-controller="Signin" class="btn btn-secondary">
-                                            Logout
-                                        </a>
-                                    </li>
-                                }
-                                else
-                                {
-                                    @if (!controller.Equals("/Main"))
-                                    {
-                                        <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-controller="Main" asp-action="Index">Main</a>
-                                        </li>
-                                    }
-                                // убрать после deploy
-                                    @if (!controller.Equals("/Signin"))
-                                    {
-                                        <li class="nav-item">
-                                            <a class="nav-link text-dark" asp-controller="Signin" asp-action="Index">Signin</a>
-                                        </li>
-                                    }
-                                }
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+                @*
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                *@
+
+                <div col-md-3>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            @if (@userName != null)
+                            {
+                                <li class="nav-item px-2 mt-2 text-black-50">
+                                    <h7>@userName</h7>
                                 </li>
-                            </ul>
-                        </div>
+                                <li class="nav-item">
+                                    <a asp-action="Logout" asp-controller="Signin" class="btn btn-secondary">
+                                        Logout
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                @if (!controller.Equals("/Main"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-controller="Main" asp-action="Index">Main</a>
+                                    </li>
+                                }
+                                // убрать после deploy
+                                @if (!controller.Equals("/Signin"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-controller="Signin" asp-action="Index">Signin</a>
+                                    </li>
+                                }
+                            }
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                        </ul>
                     </div>
-                    
                 </div>
-
-            </nav>
-        </header>
-        <div class="container">
-            <main role="main" class="pb-3">
-                @RenderBody()
-            </main>
-        </div>
-
-        <footer class="border-top footer text-muted">
-            <div class="container">
-                &copy; 2024 - SA/BA Knowledge Base - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             </div>
-        </footer>
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        @await RenderSectionAsync("Scripts", required: false)
-    </body>
+
+            
+
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - SA/BA Knowledge Base - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
 
 </html>
