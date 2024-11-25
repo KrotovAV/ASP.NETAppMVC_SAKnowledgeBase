@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\csv\" />
+    <Folder Include="wwwroot\logo\" />
     <Folder Include="wwwroot\Uploads\" />
   </ItemGroup>
 

@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SAKnowledgeBase.styles.css" asp-append-version="true" />
+    <link rel="shortcut icon" href="~/logo/favicon.ico" type="image/x-icon">
+
 </head>
 <body>
     <header>
@@ -29,6 +31,17 @@
                 <div col-md-5>
                     @if ((User.IsInRole("Manager")) || (User.IsInRole("Admin")))
                     {
+
+                        @if (controller.Contains("/Main"))
+                        {
+                            <a class="navbar-brand fw-bold" asp-area="" asp-controller="Main" asp-action="Index">Main</a>
+                        }
+                        else
+                        {
+                            <a class="navbar-brand" asp-area="" asp-controller="Main" asp-action="Index">Main</a>
+                        }
+
+
                         @if (controller.Contains("/Theme"))
                         {
                             <a class="navbar-brand fw-bold" asp-controller="Theme" asp-action="Index">Theme</a>
@@ -37,6 +50,9 @@
                         {
                             <a class="navbar-brand" asp-controller="Theme" asp-action="Index">Theme</a>
                         }
+
+
+
                         @if (controller.Contains("/Question"))
                         {
                             <a class="navbar-brand fw-bold" asp-controller="Question" asp-action="Index">Question</a>
@@ -45,6 +61,8 @@
                         {
                             <a class="navbar-brand" asp-controller="Question" asp-action="Index">Question</a>
                         }
+
+
                         @if (controller.Contains("/Info"))
                         {
                             <a class="navbar-brand fw-bold" asp-controller="Info" asp-action="Index">Info</a>
@@ -66,6 +84,8 @@
                             }
                            
                         }
+
+
                         @* @if (!controller.Contains("/Theme"))
                         {
                             <a class="navbar-brand" asp-controller="Theme" asp-action="Index">Theme</a>
@@ -115,14 +135,14 @@
                             }
                             else
                             {
-                                @if (!controller.Equals("/Main"))
+                                @if (!controller.Contains("/Main"))
                                 {
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" asp-controller="Main" asp-action="Index">Main</a>
                                     </li>
                                 }
                                 // убрать после deploy
-                                @if (!controller.Equals("/Signin"))
+                                @if (!controller.Contains("/Signin"))
                                 {
                                     <li class="nav-item">
                                         <a class="nav-link text-dark" asp-controller="Signin" asp-action="Index">Signin</a>
