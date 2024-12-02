@@ -1,0 +1,22 @@
+services:
+  EI8MH6TS5L3:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    volumes:
+      - /var/opt/mssql:/var/opt/mssql
+    ports:
+      - "1433:1433"
+    restart: always
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: MsSQLavk
+
+  saknowledgebase:
+    image: ${DOCKER_REGISTRY-}saknowledgebase
+    ports:
+      - 8000:8000
+      - 8001:8001
+    build:
+      context: SAKnowledgeBase
+      dockerfile: Dockerfile
+    depends_on:
+      - EI8MH6TS5L3

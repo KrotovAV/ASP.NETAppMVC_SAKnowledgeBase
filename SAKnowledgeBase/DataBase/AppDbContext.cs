@@ -141,8 +141,8 @@ namespace SAKnowledgeBase.DataBase
             //    }
             //);
 
-            string mail = "admin@ad.min";
-            string pass = "admin";
+            string mail = "ad@min.admin";
+            string pass = "AdminA1234!";
 
             var salt = new byte[16];
             new Random().NextBytes(salt);

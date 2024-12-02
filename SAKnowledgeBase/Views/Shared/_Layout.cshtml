@@ -1,4 +1,4 @@
-﻿﻿@using Microsoft.AspNetCore.Identity
+﻿@using Microsoft.AspNetCore.Identity
 @{
     string userName = User.Identity.Name;
     string controller = Context.Request.Path.ToString();
@@ -19,106 +19,95 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm sticky-top navbar-light bg-white border-bottom box-shadow mb-2">
             <div class="container-fluid">
-                <div col-md-1 mt-1">
-                    @* <div col-md-1 float-end mt-1"> *@
-                    <h4>
-                        SA/BA Knowledge Base
-                    </h4>
-                </div>
-           
-                <div col-md-5>
+                <div col-md- mt-2">
+                    <img src="~/logo/logo.jpg" height="30" width="50" alt="icon" style="display: inline-block; vertical-align: middle; ">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SA/BA Knowledge Base</a>
+                </div> 
+                @if (controller.Contains("/Main"))
+                {
+                    <div class="col-md-4">
+                        <form asp-controller="Main" asp-action="Index" method="get">
+                            <div class="input-group">
+                                <input name="searchFor" class="form-control" id="inputSearch" aria-describedby="inputSearchComment" aria-label="Search">
+                                <button class="btn btn-outline-secondary" type="submit" id="inputSearch">Search</button>
+                                <a class="btn btn-outline-primary" type="button" asp-controller="Main" asp-action="index">Reset Search</a>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-2 mt-4">
+                        <form>
+                            Level:
+                            <input type="radio" id="age1" name="age" value="1">
+                            <label for="age1"> Low</label>
+                            <input type="radio" id="age2" name="age" value="2" checked="CHECKED">
+                            <label for="age2">Mid</label>
+                            <input type="radio" id="age3" name="age" value="3">
+                            <label for="age3">Hight</label>
+                        </form>
+                        <br />
+                    </div>
+                }
+                else
+                {
                     @if ((User.IsInRole("Manager")) || (User.IsInRole("Admin")))
                     {
-
-                        @if (controller.Contains("/Main"))
-                        {
-                            <a class="navbar-brand fw-bold" asp-area="" asp-controller="Main" asp-action="Index">Main</a>
-                        }
-                        else
-                        {
-                            <a class="navbar-brand" asp-area="" asp-controller="Main" asp-action="Index">Main</a>
-                        }
-
-
-                        @if (controller.Contains("/Theme"))
-                        {
-                            <a class="navbar-brand fw-bold" asp-controller="Theme" asp-action="Index">Theme</a>
-                        }
-                        else
-                        {
-                            <a class="navbar-brand" asp-controller="Theme" asp-action="Index">Theme</a>
-                        }
-
-
-
-                        @if (controller.Contains("/Question"))
-                        {
-                            <a class="navbar-brand fw-bold" asp-controller="Question" asp-action="Index">Question</a>
-                        }
-                        else
-                        {
-                            <a class="navbar-brand" asp-controller="Question" asp-action="Index">Question</a>
-                        }
-
-
-                        @if (controller.Contains("/Info"))
-                        {
-                            <a class="navbar-brand fw-bold" asp-controller="Info" asp-action="Index">Info</a>
-                        }
-                        else
-                        {
-                            <a class="navbar-brand" asp-controller="Info" asp-action="Index">Info</a>
-                        }
-
-                        @if (User.IsInRole("Admin"))
-                        {
-                            @if (controller.Contains("/AdminManagment"))
+                        <div class="col-md-4 my-2">
+                            @if (controller.Contains("/Theme"))
                             {
-                                <a class="navbar-brand fw-bold" asp-area="" asp-controller="AdminManagment" asp-action="Index">Users</a>
+                                <a class="nav-item px-3 fw-bold" asp-controller="Theme" asp-action="Index">Theme</a>
                             }
                             else
                             {
-                                <a class="navbar-brand" asp-area="" asp-controller="AdminManagment" asp-action="Index">Users</a>
+                                <a class="nav-item px-3" asp-controller="Theme" asp-action="Index">Theme</a>
                             }
-                           
-                        }
 
+                            @if (controller.Contains("/Question"))
+                            {
+                                <a class="nav-item px-3 fw-bold" asp-controller="Question" asp-action="Index">Question</a>
+                            }
+                            else
+                            {
+                                <a class="nav-item px-3" asp-controller="Question" asp-action="Index">Question</a>
+                            }
 
-                        @* @if (!controller.Contains("/Theme"))
-                        {
-                            <a class="navbar-brand" asp-controller="Theme" asp-action="Index">Theme</a>
-                        }
-                        @if (!controller.Contains("/Question"))
-                        {
-                            <a class="navbar-brand" asp-controller="Question" asp-action="Index">Question</a>
-                        }
-                        @if (!controller.Contains("/Info"))
-                        {
-                            <a class="navbar-brand" asp-controller="Info" asp-action="Index">Info</a>
-                        }
+                            @if (controller.Contains("/Info"))
+                            {
+                                <a class="nav-item px-3 fw-bold" asp-controller="Info" asp-action="Index">Info</a>
+                            }
+                            else
+                            {
+                                <a class="nav-item px-3" asp-controller="Info" asp-action="Index">Info</a>
+                            }
 
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <a class="navbar-brand" asp-area="" asp-controller="AdminManagment" asp-action="Index">Users</a>
-                        } *@
+                            @if (User.IsInRole("Admin"))
+                            {
+                                @if (controller.Contains("/AdminManagment"))
+                                {
+                                    <a class="nav-item px-3 fw-bold" asp-area="" asp-controller="AdminManagment" asp-action="Index">Users</a>
+                                }
+                                else
+                                {
+                                    <a class="nav-item px-3" asp-area="" asp-controller="AdminManagment" asp-action="Index">Users</a>
+                                }
+                            }
+                        </div>
+                    }
+                }
+                <div class="col-md-1 my-2">
+                @if (@userName != null)
+                {
+                    @if (controller.Contains("/Main"))
+                    {
+                        <a class="nav-item px-3" asp-controller="Info" asp-action="Index">Manage</a>
                     }
                     else
                     {
-                        @*  <h3>
-                    Реклама 1
-                    </h3> *@
+                        <a class="nav-item px-3" asp-area="" asp-controller="Main" asp-action="Index">Main</a>
                     }
+                }
                 </div>
-
-                @*
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-                </button>
-                *@
-
                 <div col-md-3>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav flex-grow-1">
@@ -141,6 +130,12 @@
                                         <a class="nav-link text-dark" asp-controller="Main" asp-action="Index">Main</a>
                                     </li>
                                 }
+                               @*  @if (controller.Contains("/Main"))
+                                { 
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Signin" asp-action="Index">СА АУТСОРСИНГ</a>
+									</li>
+								} *@
                                 // убрать после deploy
                                 @if (!controller.Contains("/Signin"))
                                 {
@@ -149,16 +144,10 @@
                                     </li>
                                 }
                             }
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
-
-            
-
         </nav>
     </header>
     <div class="container">
